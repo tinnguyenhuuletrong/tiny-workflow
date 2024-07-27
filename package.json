@@ -2,8 +2,13 @@
   "name": "tiny-workflow",
   "module": "index.ts",
   "type": "module",
+  "scripts": {
+    "build:npm": "bun run ./tools/buildNPMPackage.ts",
+    "prepack": "bun run build:npm"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "bun-plugin-dts": "^0.2.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
