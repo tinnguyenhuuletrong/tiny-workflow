@@ -52,3 +52,170 @@ exports[`simple_durable_state: audit_logs 1`] = `
   },
 ]
 `;
+
+exports[`step_durable_state: run_part_1 1`] = `
+{
+  "cache": {
+    "step_compute:cache_computed_0": 3.141592653589793,
+  },
+  "logs": [
+    {
+      "_step": "step_begin",
+      "type": "start_hit",
+      "values": {},
+    },
+    {
+      "_step": "step_begin",
+      "type": "transition",
+      "values": {
+        "from": "step_begin",
+        "to": "step_compute",
+      },
+    },
+    {
+      "_step": "step_compute",
+      "type": "cache",
+      "values": {
+        "key": "step_compute:cache_computed_0",
+      },
+    },
+  ],
+  "state": {
+    "computed": 0,
+    "startHit": true,
+  },
+  "step": "step_compute",
+  "system": {},
+}
+`;
+
+exports[`step_durable_state: run_part_2 1`] = `
+{
+  "cache": {
+    "step_compute:cache_computed_0": 3.141592653589793,
+    "step_compute:cache_computed_1": 3.141592653589793,
+    "step_compute:cache_computed_2": 3.141592653589793,
+  },
+  "logs": [
+    {
+      "_step": "step_begin",
+      "type": "start_hit",
+      "values": {},
+    },
+    {
+      "_step": "step_begin",
+      "type": "transition",
+      "values": {
+        "from": "step_begin",
+        "to": "step_compute",
+      },
+    },
+    {
+      "_step": "step_compute",
+      "type": "cache",
+      "values": {
+        "key": "step_compute:cache_computed_0",
+      },
+    },
+    {
+      "_step": "step_compute",
+      "type": "cache",
+      "values": {
+        "key": "step_compute:cache_computed_1",
+      },
+    },
+    {
+      "_step": "step_compute",
+      "type": "cache",
+      "values": {
+        "key": "step_compute:cache_computed_2",
+      },
+    },
+    {
+      "_step": "step_compute",
+      "type": "computed_hit",
+      "values": {
+        "actionValue": 9.42477796076938,
+      },
+    },
+    {
+      "_step": "step_compute",
+      "type": "transition",
+      "values": {
+        "from": "step_compute",
+        "to": "step_end",
+      },
+    },
+    {
+      "_step": "step_end",
+      "type": "end_hit",
+      "values": {},
+    },
+  ],
+  "state": {
+    "computed": 9.42477796076938,
+    "endHit": true,
+    "startHit": true,
+  },
+  "step": "step_end",
+  "system": {},
+}
+`;
+
+exports[`wait_ms_durable_state 1`] = `
+{
+  "resumeId": "wait_for_1sec-1",
+  "type": "time",
+}
+`;
+
+exports[`wait_ms_durable_state: durable_state_with_waiting 1`] = `
+{
+  "cache": {},
+  "logs": [
+    {
+      "_step": "step_begin",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "wait_for_1sec-1",
+        "type": "time",
+      },
+    },
+    {
+      "_step": "step_begin",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "wait_for_1sec-1",
+      },
+    },
+    {
+      "_step": "step_begin",
+      "type": "log",
+      "values": {
+        "msg": "after 1 sec",
+      },
+    },
+    {
+      "_step": "step_begin",
+      "type": "transition",
+      "values": {
+        "from": "step_begin",
+        "to": "step_end",
+      },
+    },
+  ],
+  "state": {
+    "endHit": true,
+    "startHit": true,
+  },
+  "step": "step_end",
+  "system": {
+    "step_begin:timer:wait_for_1sec": {
+      "isDone": true,
+      "responsePayload": {},
+      "resumeId": "wait_for_1sec-1",
+      "type": "timer",
+    },
+  },
+}
+`;
