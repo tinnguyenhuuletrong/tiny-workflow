@@ -1,0 +1,8 @@
+{
+  "jestrunner.jestCommand": "bun test",
+  "jestrunner.jestPath": "${file}",
+  "jestrunner.debugOptions": {
+    "runtimeExecutable": "bun",
+    "runtimeArgs": ["test", "--inspect-wait=localhost:6499/"]
+  }
+}

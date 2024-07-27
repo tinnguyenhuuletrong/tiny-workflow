@@ -1,0 +1,54 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simple_durable_state: final_state 1`] = `
+{
+  "computed": 3.141592653589793,
+  "endHit": true,
+  "startHit": true,
+}
+`;
+
+exports[`simple_durable_state: audit_logs 1`] = `
+[
+  {
+    "_step": "step_begin",
+    "type": "start_hit",
+    "values": {},
+  },
+  {
+    "_step": "step_begin",
+    "type": "transition",
+    "values": {
+      "from": "step_begin",
+      "to": "step_compute",
+    },
+  },
+  {
+    "_step": "step_compute",
+    "type": "cache",
+    "values": {
+      "key": "step_compute:cache_computed",
+    },
+  },
+  {
+    "_step": "step_compute",
+    "type": "computed_hit",
+    "values": {
+      "actionValue": 3.141592653589793,
+    },
+  },
+  {
+    "_step": "step_compute",
+    "type": "transition",
+    "values": {
+      "from": "step_compute",
+      "to": "step_end",
+    },
+  },
+  {
+    "_step": "step_end",
+    "type": "end_hit",
+    "values": {},
+  },
+]
+`;
