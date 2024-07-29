@@ -4,6 +4,7 @@ import {
   type StepHandler,
   type StepIt,
 } from "../src";
+import { join } from "path";
 
 enum EStep {
   step_begin = "step_begin",
@@ -44,12 +45,12 @@ class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
 
   private async *step_play(): StepIt<EStep> {
     let count = 0;
-    let question = `number between 0-100`;
+    let question = `number between 0-100. Empty for simulate save/load`;
     let answer = [];
     const guessNum = this.state.number;
     while (true) {
       const tmp = this.waitForEvent(`event_ask_${count++}`, {
-        question: `${question}. empty for simulate save/load`,
+        question: `${question}`,
       });
       if (tmp.it) yield tmp.it;
       const last_answer = tmp.value();
@@ -113,6 +114,9 @@ async function run(state?: any): Promise<Object | null> {
     }
   }
 
-  Bun.write("./state.json", JSON.stringify(ins.toJSON()));
+  Bun.write(
+    join(__dirname, "./state.json"),
+    JSON.stringify(ins.toJSON(), null, " ")
+  );
   return null;
 }

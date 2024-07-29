@@ -1,0 +1,143 @@
+{
+ "step": "step_end",
+ "state": {
+  "number": 28,
+  "answer": [
+   50,
+   25,
+   45,
+   40,
+   38,
+   35,
+   30,
+   20,
+   25,
+   27,
+   29,
+   28
+  ]
+ },
+ "cache": {
+  "step_begin:generate_num": 28
+ },
+ "system": {
+  "step_play:event:event_ask_0": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_0-1i3uqna2l",
+   "requestPayload": {
+    "question": "number between 0-100. Empty for simulate save/load"
+   },
+   "responsePayload": 50
+  },
+  "step_play:event:event_ask_1": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_1-1i3uqnbvc",
+   "requestPayload": {
+    "question": "value 50 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 25
+  },
+  "step_play:event:event_ask_2": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_2-1i3uqnjfv",
+   "requestPayload": {
+    "question": "value 25 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 45
+  },
+  "step_play:event:event_ask_3": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_3-1i3uqnuq3",
+   "requestPayload": {
+    "question": "value 45 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 40
+  },
+  "step_play:event:event_ask_4": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_4-1i3uqo10e",
+   "requestPayload": {
+    "question": "value 40 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 38
+  },
+  "step_play:event:event_ask_5": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_5-1i3uqo4cc",
+   "requestPayload": {
+    "question": "value 38 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 35
+  },
+  "step_play:event:event_ask_6": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_6-1i3uqo6ef",
+   "requestPayload": {
+    "question": "value 35 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 30
+  },
+  "step_play:event:event_ask_7": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_7-1i3uqo8og",
+   "requestPayload": {
+    "question": "value 30 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 20
+  },
+  "step_play:event:event_ask_8": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_8-1i3uqob20",
+   "requestPayload": {
+    "question": "value 20 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 25
+  },
+  "step_play:event:event_ask_9": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_9-1i3uqoh6r",
+   "requestPayload": {
+    "question": "value 25 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 27
+  },
+  "step_play:event:event_ask_10": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_10-1i3uqonll",
+   "requestPayload": {
+    "question": "value 27 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 29
+  },
+  "step_play:event:event_ask_11": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask_11-1i3uqoq69",
+   "requestPayload": {
+    "question": "value 29 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 28
+  },
+  "step_end:event:event_congratulation": {
+   "type": "event",
+   "isDone": false,
+   "resumeId": "event_congratulation-1i3uqor6r",
+   "requestPayload": {
+    "question": "You need 12 rounds to guess the number 28. Congratulation!"
+   },
+   "responsePayload": null
+  }
+ },
+ "logs": []
+}
