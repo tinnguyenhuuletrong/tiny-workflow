@@ -57,5 +57,6 @@ export type AuditLogEntry<S, EStep> = {
 };
 export type DurableStateOpt = {
   withAuditLog: boolean;
+  debug?: boolean;
 };
 export type Constructor<T> = new (...args: any[]) => T;

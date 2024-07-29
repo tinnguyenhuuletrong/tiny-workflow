@@ -1,0 +1,404 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`guess_game_one_run: round_1 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "number between 0-100",
+  },
+  "responsePayload": 5,
+  "resumeId": "event_ask_0-0",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_one_run: round_2 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "5 lesser than the answer - number between 0-100",
+  },
+  "responsePayload": 20,
+  "resumeId": "event_ask_1-1",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_one_run: round_3 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "20 gretter than the answer - number between 0-100",
+  },
+  "responsePayload": 10,
+  "resumeId": "event_ask_2-2",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_one_run: round_4 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "10 lesser than the answer - number between 0-100",
+  },
+  "responsePayload": 15,
+  "resumeId": "event_ask_3-3",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_one_run: guess_game_one_run 1`] = `
+{
+  "cache": {},
+  "logs": [
+    {
+      "_step": "step_begin",
+      "type": "transition",
+      "values": {
+        "from": "step_begin",
+        "to": "step_play",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_0-0",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_0-0",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_1-1",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_1-1",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_2-2",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_2-2",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_3-3",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_3-3",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "transition",
+      "values": {
+        "from": "step_play",
+        "to": "step_end",
+      },
+    },
+  ],
+  "state": {
+    "answer": [
+      5,
+      20,
+      10,
+      15,
+    ],
+    "number": 15,
+  },
+  "step": "step_end",
+  "system": {
+    "step_play:event:event_ask_0": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "number between 0-100",
+      },
+      "responsePayload": 5,
+      "resumeId": "event_ask_0-0",
+      "type": "event",
+    },
+    "step_play:event:event_ask_1": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "5 lesser than the answer - number between 0-100",
+      },
+      "responsePayload": 20,
+      "resumeId": "event_ask_1-1",
+      "type": "event",
+    },
+    "step_play:event:event_ask_2": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "20 gretter than the answer - number between 0-100",
+      },
+      "responsePayload": 10,
+      "resumeId": "event_ask_2-2",
+      "type": "event",
+    },
+    "step_play:event:event_ask_3": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "10 lesser than the answer - number between 0-100",
+      },
+      "responsePayload": 15,
+      "resumeId": "event_ask_3-3",
+      "type": "event",
+    },
+  },
+}
+`;
+
+exports[`guess_game_save_load_run: round_1 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "number between 0-100",
+  },
+  "responsePayload": 5,
+  "resumeId": "event_ask_0-0",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_save_load_run: round_2 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "5 lesser than the answer - number between 0-100",
+  },
+  "responsePayload": 45,
+  "resumeId": "event_ask_1-1",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_save_load_run: round_3 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "45 lesser than the answer - number between 0-100",
+  },
+  "responsePayload": 75,
+  "resumeId": "event_ask_2-2",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_save_load_run: round_3_runinfo 1`] = `1`;
+
+exports[`guess_game_save_load_run: round_4 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "75 lesser than the answer - number between 0-100",
+  },
+  "responsePayload": 99,
+  "resumeId": "event_ask_3-3",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_save_load_run: round_4_runinfo 1`] = `1`;
+
+exports[`guess_game_save_load_run: round_5 1`] = `
+{
+  "isDone": true,
+  "requestPayload": {
+    "question": "99 gretter than the answer - number between 0-100",
+  },
+  "responsePayload": 95,
+  "resumeId": "event_ask_4-4",
+  "type": "event",
+}
+`;
+
+exports[`guess_game_save_load_run: round_5_runinfo 1`] = `1`;
+
+exports[`guess_game_save_load_run: guess_game_save_load_run 1`] = `
+{
+  "cache": {},
+  "logs": [
+    {
+      "_step": "step_begin",
+      "type": "transition",
+      "values": {
+        "from": "step_begin",
+        "to": "step_play",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_0-0",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_0-0",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_1-1",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_1-1",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_2-2",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_2-2",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_3-3",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_3-3",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_ask_4-4",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_ask_4-4",
+      },
+    },
+    {
+      "_step": "step_play",
+      "type": "transition",
+      "values": {
+        "from": "step_play",
+        "to": "step_end",
+      },
+    },
+  ],
+  "state": {
+    "answer": [
+      5,
+      45,
+      75,
+      99,
+      95,
+    ],
+    "number": 95,
+  },
+  "step": "step_end",
+  "system": {
+    "step_play:event:event_ask_0": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "number between 0-100",
+      },
+      "responsePayload": 5,
+      "resumeId": "event_ask_0-0",
+      "type": "event",
+    },
+    "step_play:event:event_ask_1": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "5 lesser than the answer - number between 0-100",
+      },
+      "responsePayload": 45,
+      "resumeId": "event_ask_1-1",
+      "type": "event",
+    },
+    "step_play:event:event_ask_2": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "45 lesser than the answer - number between 0-100",
+      },
+      "responsePayload": 75,
+      "resumeId": "event_ask_2-2",
+      "type": "event",
+    },
+    "step_play:event:event_ask_3": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "75 lesser than the answer - number between 0-100",
+      },
+      "responsePayload": 99,
+      "resumeId": "event_ask_3-3",
+      "type": "event",
+    },
+    "step_play:event:event_ask_4": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "99 gretter than the answer - number between 0-100",
+      },
+      "responsePayload": 95,
+      "resumeId": "event_ask_4-4",
+      "type": "event",
+    },
+  },
+}
+`;

@@ -219,3 +219,66 @@ exports[`wait_ms_durable_state: durable_state_with_waiting 1`] = `
   },
 }
 `;
+
+exports[`wait_event_durable_state 1`] = `
+{
+  "resumeId": "event_01-1",
+  "type": "event",
+}
+`;
+
+exports[`wait_event_durable_state: durable_state_with_event 1`] = `
+{
+  "cache": {},
+  "logs": [
+    {
+      "_step": "step_begin",
+      "type": "interrupt_begin",
+      "values": {
+        "resumeId": "event_01-1",
+        "type": "event",
+      },
+    },
+    {
+      "_step": "step_begin",
+      "type": "interrupt_end",
+      "values": {
+        "resumeId": "event_01-1",
+      },
+    },
+    {
+      "_step": "step_begin",
+      "type": "log",
+      "values": {
+        "answer": 2,
+        "msg": "event_01 resolved with value",
+      },
+    },
+    {
+      "_step": "step_begin",
+      "type": "transition",
+      "values": {
+        "from": "step_begin",
+        "to": "step_end",
+      },
+    },
+  ],
+  "state": {
+    "endHit": true,
+    "eventResponse": 2,
+    "startHit": true,
+  },
+  "step": "step_end",
+  "system": {
+    "step_begin:event:event_01": {
+      "isDone": true,
+      "requestPayload": {
+        "question": "hey human. 1 + 1 = ?",
+      },
+      "responsePayload": 2,
+      "resumeId": "event_01-1",
+      "type": "event",
+    },
+  },
+}
+`;

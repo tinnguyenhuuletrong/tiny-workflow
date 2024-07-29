@@ -10,7 +10,7 @@ import type {
 } from "./type";
 
 export class DurableState<
-  EStep,
+  EStep = any,
   StateShape = Record<string, any>,
   ExtAuditLogType = "others"
 > {
@@ -75,37 +75,46 @@ export class DurableState<
     DurableStateIterator<EStep>,
     DurableStateReturn<StateShape> | null
   > {
-    let hasNext = true;
-    const step = this.step;
-    const handler = this.stepHandler.get(step);
-    if (!handler) throw new Error(`missing stepHandler for ${step}`);
-    let res = handler();
+    // Todo: showhow allow custom from outside
+    const runId = Date.now().toString(32);
 
-    while (hasNext) {
-      const it = await res.next();
-      if (it.done) {
-        if (it.value.nextStep === null) break;
+    try {
+      let hasNext = true;
+      const step = this.step;
+      const handler = this.stepHandler.get(step);
+      if (!handler) throw new Error(`missing stepHandler for ${step}`);
+      let res = handler();
+      this._debug(`start runId=${runId}`);
+      while (hasNext) {
+        const it = await res.next();
+        if (it.done) {
+          if (it.value.nextStep === null) break;
 
-        // move to next step
-        // TODO: add log
-        this.addLog({
-          type: "transition",
-          values: {
-            from: this.step,
-            to: it.value.nextStep,
-          },
-        });
-        const step = it.value.nextStep;
-        this.step = step;
-        const handler = this.stepHandler.get(step);
-        if (!handler) throw new Error(`missing stepHandler for ${step}`);
-        res = handler();
-      } else {
-        yield it.value as DurableStateIterator<EStep>;
+          // move to next step
+          // TODO: add log
+          this.addLog({
+            type: "transition",
+            values: {
+              from: this.step,
+              to: it.value.nextStep,
+            },
+          });
+          const step = it.value.nextStep;
+          this.step = step;
+          const handler = this.stepHandler.get(step);
+          if (!handler) throw new Error(`missing stepHandler for ${step}`);
+          res = handler();
+        } else {
+          yield it.value as DurableStateIterator<EStep>;
+        }
       }
-    }
 
-    return { isEnd: true, finalState: this.state };
+      return { isEnd: true, finalState: this.state };
+    } catch (error) {
+      throw error;
+    } finally {
+      this._debug(`end runId=${runId}`);
+    }
   }
 
   protected async withAction<TRes = any>(
@@ -171,7 +180,7 @@ export class DurableState<
     timeoutMs: number
   ): {
     it?: DurableStateIterator<EStep>;
-    value: number;
+    value: () => number | undefined;
   } {
     const cacheKey = `${this.step}:timer:${key}`;
 
@@ -181,7 +190,7 @@ export class DurableState<
       if (tmp.isDone) {
         return {
           it: undefined,
-          value: tmp.resumeAfter,
+          value: () => tmp.resumeAfter,
         };
       }
     }
@@ -211,7 +220,7 @@ export class DurableState<
           resumeAt,
         },
       },
-      value: resumeAt,
+      value: () => tmp.resumeAfter,
     };
   }
 
@@ -220,10 +229,9 @@ export class DurableState<
     requestPayload: any
   ): {
     it?: DurableStateIterator<EStep>;
-    value: TRes | undefined;
+    value: () => TRes | undefined;
   } {
     const cacheKey = `${this.step}:event:${key}`;
-    const resumeId = this.genResumeId(key);
 
     const tmp = this.system[cacheKey];
     if (tmp) {
@@ -231,11 +239,12 @@ export class DurableState<
       if (tmp.isDone) {
         return {
           it: undefined,
-          value: tmp.responsePayload,
+          value: () => this.system[cacheKey]?.responsePayload,
         };
       }
     }
 
+    const resumeId = this.genResumeId(key);
     this.system[cacheKey] = {
       type: "event",
       isDone: false,
@@ -259,7 +268,7 @@ export class DurableState<
           resumeId,
         },
       },
-      value: undefined,
+      value: () => this.system[cacheKey]?.responsePayload,
     };
   }
 
@@ -277,6 +286,10 @@ export class DurableState<
       itm._step = this.step;
       this.logs.push(itm);
     }
+  }
+
+  protected _debug(...args: any[]) {
+    if (this.opt?.debug) console.log("[DurableState] ", ...args);
   }
 
   private canRetry(
