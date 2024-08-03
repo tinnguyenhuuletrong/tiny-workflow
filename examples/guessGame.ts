@@ -30,6 +30,7 @@ class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
   constructor() {
     super(EStep.step_begin, {
       withAuditLog: false,
+      debug: true,
     });
     this._collectAndRegisterSteps();
   }
@@ -93,7 +94,10 @@ async function run(state?: any): Promise<Object | null> {
   if (!state) ins = new GuessGameState();
   else {
     console.log("----- resumed -----");
-    ins = GuessGameState.fromJSON(GuessGameState, state);
+    ins = GuessGameState.fromJSON(GuessGameState, state, {
+      withAuditLog: false,
+      debug: true,
+    });
   }
   for await (const it of ins.exec()) {
     if (it.resumeTrigger) {
