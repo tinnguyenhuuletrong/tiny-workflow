@@ -1,6 +1,6 @@
 import type {
-  DurableStateSystemEntry,
   AuditLogEntry,
+  DurableStateSystemEntry,
   StepHandler,
   DurableStateOpt,
   DurableStateIterator,
@@ -8,6 +8,8 @@ import type {
   ExeOpt,
   Constructor,
 } from "./type";
+
+const SYSTEM_SEQ_KEY = "_seq";
 
 export class DurableState<
   EStep = any,
@@ -33,16 +35,29 @@ export class DurableState<
     }
   }
 
+  /** Current step */
   get currentStep() {
     return this.step;
   }
 
+  /** Clone of audit logs */
   get auditLogs() {
     return [...this.logs];
   }
 
+  /** Clone of current state */
   get currentState() {
     return { ...this.state };
+  }
+
+  /** Sequence number. It increa everytime state change */
+  get stepSeq() {
+    return this.cache[SYSTEM_SEQ_KEY] ?? 0;
+  }
+
+  /** Prefix for system and cache key - prevent conflict in case a step visit multiple times */
+  protected get stepKeyPrefix() {
+    return `${this.stepSeq}:${this.step}`;
   }
 
   getResume(resumeId: string) {
@@ -91,16 +106,20 @@ export class DurableState<
           if (it.value.nextStep === null) break;
 
           // move to next step
-          // TODO: add log
-          this.addLog({
-            type: "transition",
-            values: {
-              from: this.step,
-              to: it.value.nextStep,
-            },
-          });
+          const prevStep = this.step;
           const step = it.value.nextStep;
-          this.step = step;
+          if (prevStep != step) {
+            this._moveToStep(step);
+            this.addLog({
+              type: "transition",
+              values: {
+                from: prevStep,
+                to: it.value.nextStep,
+                stepSeq: this.stepSeq,
+              },
+            });
+          }
+
           const handler = this.stepHandler.get(step);
           if (!handler) throw new Error(`missing stepHandler for ${step}`);
           res = handler();
@@ -117,6 +136,12 @@ export class DurableState<
     }
   }
 
+  private _moveToStep(step: EStep) {
+    const numStep = this.stepSeq;
+    this.cache[SYSTEM_SEQ_KEY] = numStep + 1;
+    this.step = step;
+  }
+
   protected async withAction<TRes = any>(
     key: string,
     action: () => Promise<any>,
@@ -127,7 +152,7 @@ export class DurableState<
   }> {
     const shouldUseCache = opt ? !opt.ignoreCache : true;
     const maxRetry = opt?.maxRetry ? opt.maxRetry : 0;
-    const cacheKey = `${this.step}:${key}`;
+    const cacheKey = `${this.stepKeyPrefix}:${key}`;
     if (shouldUseCache) {
       const tmp = this.cache[cacheKey];
       if (tmp) {
@@ -182,7 +207,7 @@ export class DurableState<
     it?: DurableStateIterator<EStep>;
     value: () => number | undefined;
   } {
-    const cacheKey = `${this.step}:timer:${key}`;
+    const cacheKey = `${this.stepKeyPrefix}:timer:${key}`;
 
     const tmp = this.system[cacheKey];
     if (tmp) {
@@ -231,7 +256,7 @@ export class DurableState<
     it?: DurableStateIterator<EStep>;
     value: () => TRes | undefined;
   } {
-    const cacheKey = `${this.step}:event:${key}`;
+    const cacheKey = `${this.stepKeyPrefix}:event:${key}`;
 
     const tmp = this.system[cacheKey];
     if (tmp) {
@@ -299,7 +324,7 @@ export class DurableState<
     counter: number;
     retryKey: string;
   } {
-    const cacheKey = `${this.step}:__retry__:${key}`;
+    const cacheKey = `${this.stepKeyPrefix}:__retry__:${key}`;
     const val = this.cache[cacheKey] ?? maxRetry;
     this.cache[cacheKey] = val - 1;
     return {
