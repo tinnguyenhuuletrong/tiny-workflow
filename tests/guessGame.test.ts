@@ -37,11 +37,11 @@ class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
     this._collectAndRegisterSteps();
   }
 
-  private async *step_begin(): StepIt<EStep> {
+  private async *step_begin(): StepIt<EStep, EStep.step_play> {
     return { nextStep: EStep.step_play };
   }
 
-  private async *step_play(): StepIt<EStep> {
+  private async *step_play(): StepIt<EStep, EStep.step_end> {
     let count = 0;
     let question = `number between 0-100`;
     let answer = [];
@@ -67,7 +67,7 @@ class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
     return { nextStep: EStep.step_end };
   }
 
-  private async *step_end(): StepIt<EStep> {
+  private async *step_end(): StepIt<EStep, null> {
     return { nextStep: null };
   }
 }

@@ -37,11 +37,11 @@ export type EventSystemEntry = {
 };
 export type DurableStateSystemEntry = TimerSystemEntry | EventSystemEntry;
 
-export type StepIt<EStep> = AsyncIterator<
+export type StepIt<EStep, MoveToStep> = AsyncIterator<
   DurableStateIterator<EStep>,
-  { nextStep: EStep | null }
+  { nextStep: MoveToStep | null }
 >;
-export type StepHandler<EStep> = () => StepIt<EStep>;
+export type StepHandler<EStep> = () => StepIt<EStep, EStep>;
 export type AuditLogEntry<S, EStep> = {
   type:
     | "init"

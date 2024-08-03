@@ -38,7 +38,7 @@ test("simple_durable_state", async () => {
       this._collectAndRegisterSteps();
     }
 
-    private async *step_begin(): StepIt<EStep> {
+    private async *step_begin(): StepIt<EStep, EStep.step_compute> {
       this.state.startHit = true;
       this.addLog({
         type: "start_hit",
@@ -47,7 +47,7 @@ test("simple_durable_state", async () => {
       return { nextStep: EStep.step_compute };
     }
 
-    private async *step_compute(): StepIt<EStep> {
+    private async *step_compute(): StepIt<EStep, EStep.step_end> {
       // with cached action
       const { it, value } = await this.withAction(
         "cache_computed",
@@ -67,7 +67,7 @@ test("simple_durable_state", async () => {
 
       return { nextStep: EStep.step_end };
     }
-    private async *step_end(): StepIt<EStep> {
+    private async *step_end(): StepIt<EStep, null> {
       this.state.endHit = true;
       this.addLog({
         type: "end_hit",
@@ -126,7 +126,7 @@ test("step_durable_state", async () => {
       this._collectAndRegisterSteps();
     }
 
-    private async *step_begin(): StepIt<EStep> {
+    private async *step_begin(): StepIt<EStep, EStep.step_compute> {
       this.state.startHit = true;
       this.addLog({
         type: "start_hit",
@@ -135,7 +135,7 @@ test("step_durable_state", async () => {
       return { nextStep: EStep.step_compute };
     }
 
-    private async *step_compute(): StepIt<EStep> {
+    private async *step_compute(): StepIt<EStep, EStep.step_end> {
       let sum = 0;
       for (let i = 0; i < 3; i++) {
         // with cached action
@@ -159,7 +159,7 @@ test("step_durable_state", async () => {
 
       return { nextStep: EStep.step_end };
     }
-    private async *step_end(): StepIt<EStep> {
+    private async *step_end(): StepIt<EStep, null> {
       this.state.endHit = true;
       this.addLog({
         type: "end_hit",
@@ -224,7 +224,7 @@ test("wait_ms_durable_state", async () => {
       this._collectAndRegisterSteps();
     }
 
-    private async *step_begin(): StepIt<EStep> {
+    private async *step_begin(): StepIt<EStep, EStep.step_end> {
       this.state.startHit = true;
       const { it } = this.waitForMs("wait_for_1sec", 1000);
       if (it) yield it;
@@ -238,7 +238,7 @@ test("wait_ms_durable_state", async () => {
       return { nextStep: EStep.step_end };
     }
 
-    private async *step_end(): StepIt<EStep> {
+    private async *step_end(): StepIt<EStep, null> {
       this.state.endHit = true;
 
       return { nextStep: null };
@@ -309,7 +309,7 @@ test("wait_event_durable_state", async () => {
       this._collectAndRegisterSteps();
     }
 
-    private async *step_begin(): StepIt<EStep> {
+    private async *step_begin(): StepIt<EStep, EStep.step_end> {
       this.state.startHit = true;
       const { it, value } = this.waitForEvent<number>("event_01", {
         question: "hey human. 1 + 1 = ?",
@@ -328,7 +328,7 @@ test("wait_event_durable_state", async () => {
       return { nextStep: EStep.step_end };
     }
 
-    private async *step_end(): StepIt<EStep> {
+    private async *step_end(): StepIt<EStep, null> {
       this.state.endHit = true;
 
       return { nextStep: null };

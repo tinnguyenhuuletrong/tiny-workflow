@@ -35,7 +35,7 @@ class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
     this._collectAndRegisterSteps();
   }
 
-  private async *step_begin(): StepIt<EStep> {
+  private async *step_begin(): StepIt<EStep, EStep.step_play> {
     const res = await this.withAction("generate_num", async () => {
       return Math.round(Math.random() * 100);
     });
@@ -44,7 +44,7 @@ class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
     return { nextStep: EStep.step_play };
   }
 
-  private async *step_play(): StepIt<EStep> {
+  private async *step_play(): StepIt<EStep, EStep.step_end> {
     let count = 0;
     let question = `number between 0-100. Empty for simulate save/load`;
     let answer = [];
@@ -70,7 +70,7 @@ class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
     return { nextStep: EStep.step_end };
   }
 
-  private async *step_end(): StepIt<EStep> {
+  private async *step_end(): StepIt<EStep, null> {
     const tmp = this.waitForEvent(`event_congratulation`, {
       question: `You need ${this.state.answer?.length} rounds to guess the number ${this.state.number}. Congratulation!`,
     });
