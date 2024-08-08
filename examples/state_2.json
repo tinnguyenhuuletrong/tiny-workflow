@@ -1,0 +1,643 @@
+{
+ "step": "step_end",
+ "state": {
+  "number": 41,
+  "hint": "value 42 is > than the answer - number between 0-100",
+  "answer": [
+   50,
+   25,
+   40,
+   30,
+   26,
+   35,
+   38,
+   39,
+   45,
+   43,
+   42,
+   41
+  ]
+ },
+ "cache": {
+  "0:step_begin:generate_num": 41,
+  "_seq": 25
+ },
+ "system": {
+  "1:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o04saj",
+   "requestPayload": {
+    "question": "number between 0-100. Empty for simulate save/load"
+   },
+   "responsePayload": 50
+  },
+  "3:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o04uvi",
+   "requestPayload": {
+    "question": "value 50 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 25
+  },
+  "5:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o051km",
+   "requestPayload": {
+    "question": "value 25 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 40
+  },
+  "7:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o058i0",
+   "requestPayload": {
+    "question": "value 40 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 30
+  },
+  "9:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o05dr7",
+   "requestPayload": {
+    "question": "value 30 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 26
+  },
+  "11:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o05j30",
+   "requestPayload": {
+    "question": "value 26 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 35
+  },
+  "13:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o05uft",
+   "requestPayload": {
+    "question": "value 35 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 38
+  },
+  "15:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o061jr",
+   "requestPayload": {
+    "question": "value 38 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 39
+  },
+  "17:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o063hu",
+   "requestPayload": {
+    "question": "value 39 is < than the answer - number between 0-100"
+   },
+   "responsePayload": 45
+  },
+  "19:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o068uj",
+   "requestPayload": {
+    "question": "value 45 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 43
+  },
+  "21:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o06bk0",
+   "requestPayload": {
+    "question": "value 43 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 42
+  },
+  "23:step_ask:event:event_ask": {
+   "type": "event",
+   "isDone": true,
+   "resumeId": "event_ask-1i4o06j48",
+   "requestPayload": {
+    "question": "value 42 is > than the answer - number between 0-100"
+   },
+   "responsePayload": 41
+  },
+  "25:step_end:event:event_congratulation": {
+   "type": "event",
+   "isDone": false,
+   "resumeId": "event_congratulation-1i4o06kj7",
+   "requestPayload": {
+    "question": "You need 12 rounds to guess the number 41. Congratulation!"
+   },
+   "responsePayload": null
+  }
+ },
+ "logs": [
+  {
+   "type": "init",
+   "values": {
+    "defaultStep": "step_begin"
+   },
+   "_at": 1723087352135,
+   "_step": "step_begin"
+  },
+  {
+   "type": "cache",
+   "values": {
+    "key": "0:step_begin:generate_num"
+   },
+   "_at": 1723087352143,
+   "_step": "step_begin"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_begin",
+    "to": "step_ask",
+    "stepSeq": 1
+   },
+   "_at": 1723087352147,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o04saj"
+   },
+   "_at": 1723087352147,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o04saj"
+   },
+   "_at": 1723087354865,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 2
+   },
+   "_at": 1723087354865,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 3
+   },
+   "_at": 1723087354866,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o04uvi"
+   },
+   "_at": 1723087354866,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o04uvi"
+   },
+   "_at": 1723087357589,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 4
+   },
+   "_at": 1723087357590,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 5
+   },
+   "_at": 1723087357590,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o051km"
+   },
+   "_at": 1723087357590,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o051km"
+   },
+   "_at": 1723087364671,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 6
+   },
+   "_at": 1723087364671,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 7
+   },
+   "_at": 1723087364672,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o058i0"
+   },
+   "_at": 1723087364672,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o058i0"
+   },
+   "_at": 1723087370087,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 8
+   },
+   "_at": 1723087370087,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 9
+   },
+   "_at": 1723087370087,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o05dr7"
+   },
+   "_at": 1723087370087,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o05dr7"
+   },
+   "_at": 1723087375456,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 10
+   },
+   "_at": 1723087375456,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 11
+   },
+   "_at": 1723087375456,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o05j30"
+   },
+   "_at": 1723087375456,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o05j30"
+   },
+   "_at": 1723087387133,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 12
+   },
+   "_at": 1723087387133,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 13
+   },
+   "_at": 1723087387133,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o05uft"
+   },
+   "_at": 1723087387133,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o05uft"
+   },
+   "_at": 1723087390331,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 14
+   },
+   "_at": 1723087390331,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 15
+   },
+   "_at": 1723087390331,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o061jr"
+   },
+   "_at": 1723087390331,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o061jr"
+   },
+   "_at": 1723087392318,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 16
+   },
+   "_at": 1723087392318,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 17
+   },
+   "_at": 1723087392318,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o063hu"
+   },
+   "_at": 1723087392318,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o063hu"
+   },
+   "_at": 1723087397843,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 18
+   },
+   "_at": 1723087397843,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 19
+   },
+   "_at": 1723087397843,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o068uj"
+   },
+   "_at": 1723087397843,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o068uj"
+   },
+   "_at": 1723087400084,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 20
+   },
+   "_at": 1723087400084,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 21
+   },
+   "_at": 1723087400084,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o06b4k"
+   },
+   "_at": 1723087400084,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o06bk0"
+   },
+   "_at": 1723087400576,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o06bk0"
+   },
+   "_at": 1723087405838,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 22
+   },
+   "_at": 1723087405838,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_ask",
+    "stepSeq": 23
+   },
+   "_at": 1723087405838,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o06goe"
+   },
+   "_at": 1723087405838,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_ask-1i4o06j48"
+   },
+   "_at": 1723087408264,
+   "_step": "step_ask"
+  },
+  {
+   "type": "interrupt_end",
+   "values": {
+    "resumeId": "event_ask-1i4o06j48"
+   },
+   "_at": 1723087409767,
+   "_step": "step_ask"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_ask",
+    "to": "step_check",
+    "stepSeq": 24
+   },
+   "_at": 1723087409767,
+   "_step": "step_check"
+  },
+  {
+   "type": "transition",
+   "values": {
+    "from": "step_check",
+    "to": "step_end",
+    "stepSeq": 25
+   },
+   "_at": 1723087409767,
+   "_step": "step_end"
+  },
+  {
+   "type": "interrupt_begin",
+   "values": {
+    "type": "event",
+    "resumeId": "event_congratulation-1i4o06kj7"
+   },
+   "_at": 1723087409767,
+   "_step": "step_end"
+  }
+ ]
+}

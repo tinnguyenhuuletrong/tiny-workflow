@@ -26,10 +26,6 @@ bun run build:npm
 
 ## TODO
 
-- Support step re-visit
-
-  - guess_game_2: step_ask <-> step_eval
-
 - Support Runtime, Context, Storage
 
 ## TO RESEARCH
