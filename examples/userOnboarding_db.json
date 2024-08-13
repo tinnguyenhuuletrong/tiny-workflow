@@ -1,0 +1,1202 @@
+[
+ [
+  "r_0",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_0@abc.com",
+    "waitBeforePromotionEmail": 3168
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e5r0"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524912988
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_0@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524912991,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524912992,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e5r0"
+     },
+     "_at": 1723524912992,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524912992,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_1",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_1@abc.com",
+    "waitBeforePromotionEmail": 164
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e2t1"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524909984
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_1@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909985,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524909985,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2t1"
+     },
+     "_at": 1723524909985,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524909985,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_2",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_2@abc.com",
+    "waitBeforePromotionEmail": 126
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e2rt"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524909946
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_2@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909949,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524909949,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2rt"
+     },
+     "_at": 1723524909949,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524909949,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_3",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_3@abc.com",
+    "waitBeforePromotionEmail": 3538
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e66g"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524913358
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_3@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524913359,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524913360,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e66g"
+     },
+     "_at": 1723524913360,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524913360,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_4",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_4@abc.com",
+    "waitBeforePromotionEmail": 4932
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e7i4"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524914752
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_4@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524914756,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524914756,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e7i4"
+     },
+     "_at": 1723524914756,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524914756,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_5",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_5@abc.com",
+    "waitBeforePromotionEmail": 1609
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e4a9"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524911429
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_5@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524911433,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524911433,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e4a9"
+     },
+     "_at": 1723524911433,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524911433,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_6",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_6@abc.com",
+    "waitBeforePromotionEmail": 1118
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e3qu"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524910938
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_6@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524910941,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524910942,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e3qu"
+     },
+     "_at": 1723524910942,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524910942,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_7",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_7@abc.com",
+    "waitBeforePromotionEmail": 2312
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e507"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524912132
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_7@abc.com"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524912135,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524912135,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e507"
+     },
+     "_at": 1723524912136,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524912136,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_8",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_8@abc.com",
+    "waitBeforePromotionEmail": 4250
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e6sq"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524914070
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909816,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_8@abc.com"
+     },
+     "_at": 1723524909817,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524914074,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524914074,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e6sq"
+     },
+     "_at": 1723524914074,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524914074,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ],
+ [
+  "r_9",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "email_9@abc.com",
+    "waitBeforePromotionEmail": 2402
+   },
+   "cache": {
+    "_seq": 3,
+    "1:step_wellcome_email:send_email": "1i551e2nr",
+    "2:step_promotion_1:send_email": "1i551e530"
+   },
+   "system": {
+    "2:step_promotion_1:timer:wait_before_promotion_email": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_before_promotion_email-1i551e2ns",
+     "resumeAfter": 1723524912222
+    }
+   },
+   "logs": [
+    {
+     "type": "init",
+     "values": {
+      "defaultStep": "step_begin"
+     },
+     "_at": 1723524909817,
+     "_step": "step_begin"
+    },
+    {
+     "type": "email_updated",
+     "values": {
+      "newValue": "email_9@abc.com"
+     },
+     "_at": 1723524909817,
+     "_step": "step_begin"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_begin",
+      "to": "step_wellcome_email",
+      "stepSeq": 1
+     },
+     "_at": 1723524909819,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_wellcome_email:send_email"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e2nr"
+     },
+     "_at": 1723524909820,
+     "_step": "step_wellcome_email"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_wellcome_email",
+      "to": "step_promotion_1",
+      "stepSeq": 2
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_begin",
+     "values": {
+      "type": "time",
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524909820,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "interrupt_end",
+     "values": {
+      "resumeId": "wait_before_promotion_email-1i551e2ns"
+     },
+     "_at": 1723524912224,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "2:step_promotion_1:send_email"
+     },
+     "_at": 1723524912224,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "email_sent",
+     "values": {
+      "deliveryId": "1i551e530"
+     },
+     "_at": 1723524912224,
+     "_step": "step_promotion_1"
+    },
+    {
+     "type": "transition",
+     "values": {
+      "from": "step_promotion_1",
+      "to": "step_end",
+      "stepSeq": 3
+     },
+     "_at": 1723524912224,
+     "_step": "step_end"
+    }
+   ]
+  }
+ ]
+]

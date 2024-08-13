@@ -14,7 +14,7 @@ const SYSTEM_SEQ_KEY = "_seq";
 export class DurableState<
   EStep = any,
   StateShape = Record<string, any>,
-  ExtAuditLogType = "others"
+  ExtAuditLogType = any
 > {
   private step!: EStep;
   private cache: Record<string, any> = {};
@@ -22,6 +22,7 @@ export class DurableState<
   private logs: AuditLogEntry<ExtAuditLogType, EStep>[] = [];
   protected state: StateShape = {} as StateShape;
   protected stepHandler = new Map<EStep, StepHandler<EStep>>();
+  protected runId?: string;
 
   constructor(defaultStep?: EStep, private opt?: DurableStateOpt) {
     if (defaultStep) {
@@ -86,12 +87,14 @@ export class DurableState<
     });
   }
 
-  async *exec(): AsyncGenerator<
+  async *exec(
+    runId?: string
+  ): AsyncGenerator<
     DurableStateIterator<EStep>,
     DurableStateReturn<StateShape> | null
   > {
-    // Todo: showhow allow custom from outside
-    const runId = Date.now().toString(32);
+    runId = runId ?? Date.now().toString(32);
+    this.runId = runId;
 
     try {
       let hasNext = true;
@@ -99,7 +102,7 @@ export class DurableState<
       const handler = this.stepHandler.get(step);
       if (!handler) throw new Error(`missing stepHandler for ${step}`);
       let res = handler();
-      this._debug(`start runId=${runId}`);
+      this._debug(`start`);
       while (hasNext) {
         const it = await res.next();
         if (it.done) {
@@ -132,7 +135,7 @@ export class DurableState<
     } catch (error) {
       throw error;
     } finally {
-      this._debug(`end runId=${runId}`);
+      this._debug(`end`);
     }
   }
 
@@ -314,7 +317,7 @@ export class DurableState<
   }
 
   protected _debug(...args: any[]) {
-    if (this.opt?.debug) console.log("[DurableState] ", ...args);
+    if (this.opt?.debug) console.log(`[DurableState][${this.runId}] `, ...args);
   }
 
   private canRetry(

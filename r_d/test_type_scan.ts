@@ -67,3 +67,7 @@ function parseStepTransition(method: MethodDeclaration) {
   const filePath = __dirname + "/../examples/guessGame_2.ts";
   console.log(filePath, "->", doParseWorkflowMetadata(filePath));
 }
+{
+  const filePath = __dirname + "/../examples/userOnboarding.ts";
+  console.log(filePath, "->", doParseWorkflowMetadata(filePath));
+}
