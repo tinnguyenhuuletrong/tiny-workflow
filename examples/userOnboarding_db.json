@@ -5,19 +5,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_0@abc.com",
-    "waitBeforePromotionEmail": 3168
+    "waitBeforePromotionEmail": 4377
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e5r0"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5j.rupervjlo",
+    "1:step_process:send_email_promotion": "4eg.qlcfmgup"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524912988
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533537112
     }
    },
    "logs": [
@@ -26,7 +26,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532720,
      "_step": "step_begin"
     },
     {
@@ -34,86 +34,76 @@
      "values": {
       "newValue": "email_0@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532722,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532730,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5j.rupervjlo"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532733,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524912991,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524912992,
-     "_step": "step_promotion_1"
+     "_at": 1723533537114,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e5r0"
+      "deliveryId": "4eg.qlcfmgup"
      },
-     "_at": 1723524912992,
-     "_step": "step_promotion_1"
+     "_at": 1723533537114,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533537114,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524912992,
+     "_at": 1723533537114,
      "_step": "step_end"
     }
    ]
@@ -125,19 +115,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_1@abc.com",
-    "waitBeforePromotionEmail": 164
+    "waitBeforePromotionEmail": 4026
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e2t1"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.0uoii0inp",
+    "1:step_process:send_email_promotion": "43i.laebldia"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524909984
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533536761
     }
    },
    "logs": [
@@ -146,7 +136,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -154,86 +144,76 @@
      "values": {
       "newValue": "email_1@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532733,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.0uoii0inp"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532733,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909985,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524909985,
-     "_step": "step_promotion_1"
+     "_at": 1723533536764,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2t1"
+      "deliveryId": "43i.laebldia"
      },
-     "_at": 1723524909985,
-     "_step": "step_promotion_1"
+     "_at": 1723533536764,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533536764,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524909985,
+     "_at": 1723533536764,
      "_step": "step_end"
     }
    ]
@@ -245,19 +225,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_2@abc.com",
-    "waitBeforePromotionEmail": 126
+    "waitBeforePromotionEmail": 4382
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e2rt"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.3773jd2mn",
+    "1:step_process:send_email_promotion": "4ej.o1ggu3kh"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524909946
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533537117
     }
    },
    "logs": [
@@ -266,7 +246,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -274,86 +254,76 @@
      "values": {
       "newValue": "email_2@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532733,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.3773jd2mn"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532733,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909949,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524909949,
-     "_step": "step_promotion_1"
+     "_at": 1723533537117,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2rt"
+      "deliveryId": "4ej.o1ggu3kh"
      },
-     "_at": 1723524909949,
-     "_step": "step_promotion_1"
+     "_at": 1723533537117,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533537117,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524909949,
+     "_at": 1723533537117,
      "_step": "step_end"
     }
    ]
@@ -365,19 +335,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_3@abc.com",
-    "waitBeforePromotionEmail": 3538
+    "waitBeforePromotionEmail": 1565
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e66g"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.4je13p1e2",
+    "1:step_process:send_email_promotion": "1mk.62qvsl1e8"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524913358
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533534300
     }
    },
    "logs": [
@@ -386,7 +356,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -394,86 +364,76 @@
      "values": {
       "newValue": "email_3@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532733,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.4je13p1e2"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524913359,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524913360,
-     "_step": "step_promotion_1"
+     "_at": 1723533534301,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e66g"
+      "deliveryId": "1mk.62qvsl1e8"
      },
-     "_at": 1723524913360,
-     "_step": "step_promotion_1"
+     "_at": 1723533534302,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533534302,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524913360,
+     "_at": 1723533534302,
      "_step": "step_end"
     }
    ]
@@ -485,19 +445,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_4@abc.com",
-    "waitBeforePromotionEmail": 4932
+    "waitBeforePromotionEmail": 33
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e7i4"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.5rb273d3o",
+    "1:step_process:send_email_promotion": "6q.li06547eq"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524914752
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533532768
     }
    },
    "logs": [
@@ -506,7 +466,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -514,86 +474,76 @@
      "values": {
       "newValue": "email_4@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.5rb273d3o"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524914756,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524914756,
-     "_step": "step_promotion_1"
+     "_at": 1723533532771,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e7i4"
+      "deliveryId": "6q.li06547eq"
      },
-     "_at": 1723524914756,
-     "_step": "step_promotion_1"
+     "_at": 1723533532772,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533532772,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524914756,
+     "_at": 1723533532772,
      "_step": "step_end"
     }
    ]
@@ -605,19 +555,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_5@abc.com",
-    "waitBeforePromotionEmail": 1609
+    "waitBeforePromotionEmail": 1448
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e4a9"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.6jebjaeqb",
+    "1:step_process:send_email_promotion": "1j1.42ps7pqb"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524911429
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533534183
     }
    },
    "logs": [
@@ -626,7 +576,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -634,86 +584,76 @@
      "values": {
       "newValue": "email_5@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.6jebjaeqb"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524911433,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524911433,
-     "_step": "step_promotion_1"
+     "_at": 1723533534184,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e4a9"
+      "deliveryId": "1j1.42ps7pqb"
      },
-     "_at": 1723524911433,
-     "_step": "step_promotion_1"
+     "_at": 1723533534187,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533534187,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524911433,
+     "_at": 1723533534187,
      "_step": "step_end"
     }
    ]
@@ -725,19 +665,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_6@abc.com",
-    "waitBeforePromotionEmail": 1118
+    "waitBeforePromotionEmail": 2944
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e3qu"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.751v3hqo3",
+    "1:step_process:send_email_promotion": "31o.c9jiveg2"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524910938
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533535679
     }
    },
    "logs": [
@@ -746,7 +686,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -754,86 +694,76 @@
      "values": {
       "newValue": "email_6@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.751v3hqo3"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524910941,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524910942,
-     "_step": "step_promotion_1"
+     "_at": 1723533535681,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e3qu"
+      "deliveryId": "31o.c9jiveg2"
      },
-     "_at": 1723524910942,
-     "_step": "step_promotion_1"
+     "_at": 1723533535682,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533535682,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524910942,
+     "_at": 1723533535682,
      "_step": "step_end"
     }
    ]
@@ -845,19 +775,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_7@abc.com",
-    "waitBeforePromotionEmail": 2312
+    "waitBeforePromotionEmail": 491
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e507"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.849n58sbh",
+    "1:step_process:send_email_promotion": "l4.pbveduqc8"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524912132
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533533226
     }
    },
    "logs": [
@@ -866,7 +796,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -874,86 +804,76 @@
      "values": {
       "newValue": "email_7@abc.com"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.849n58sbh"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524912135,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524912135,
-     "_step": "step_promotion_1"
+     "_at": 1723533533230,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e507"
+      "deliveryId": "l4.pbveduqc8"
      },
-     "_at": 1723524912136,
-     "_step": "step_promotion_1"
+     "_at": 1723533533230,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533533230,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524912136,
+     "_at": 1723533533230,
      "_step": "step_end"
     }
    ]
@@ -965,19 +885,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_8@abc.com",
-    "waitBeforePromotionEmail": 4250
+    "waitBeforePromotionEmail": 4110
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e6sq"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.90brimh98",
+    "1:step_process:send_email_promotion": "467.1p499h28"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524914070
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533536845
     }
    },
    "logs": [
@@ -986,7 +906,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909816,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -994,86 +914,76 @@
      "values": {
       "newValue": "email_8@abc.com"
      },
-     "_at": 1723524909817,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.90brimh98"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524914074,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524914074,
-     "_step": "step_promotion_1"
+     "_at": 1723533536848,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e6sq"
+      "deliveryId": "467.1p499h28"
      },
-     "_at": 1723524914074,
-     "_step": "step_promotion_1"
+     "_at": 1723533536848,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533536848,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524914074,
+     "_at": 1723533536849,
      "_step": "step_end"
     }
    ]
@@ -1085,19 +995,19 @@
    "step": "step_end",
    "state": {
     "userEmail": "email_9@abc.com",
-    "waitBeforePromotionEmail": 2402
+    "waitBeforePromotionEmail": 117
    },
    "cache": {
-    "_seq": 3,
-    "1:step_wellcome_email:send_email": "1i551e2nr",
-    "2:step_promotion_1:send_email": "1i551e530"
+    "_seq": 2,
+    "1:step_process:send_email_wellcome": "5k.b092eifgt",
+    "1:step_process:send_email_promotion": "9e.ihf6vtuvk"
    },
    "system": {
-    "2:step_promotion_1:timer:wait_before_promotion_email": {
+    "1:step_process:timer:wait_before_promotion_email": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_before_promotion_email-1i551e2ns",
-     "resumeAfter": 1723524912222
+     "resumeId": "wait_before_promotion_email-1i559l7hv",
+     "resumeAfter": 1723533532852
     }
    },
    "logs": [
@@ -1106,7 +1016,7 @@
      "values": {
       "defaultStep": "step_begin"
      },
-     "_at": 1723524909817,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
@@ -1114,86 +1024,76 @@
      "values": {
       "newValue": "email_9@abc.com"
      },
-     "_at": 1723524909817,
+     "_at": 1723533532723,
      "_step": "step_begin"
     },
     {
      "type": "transition",
      "values": {
       "from": "step_begin",
-      "to": "step_wellcome_email",
+      "to": "step_process",
       "stepSeq": 1
      },
-     "_at": 1723524909819,
-     "_step": "step_wellcome_email"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "1:step_wellcome_email:send_email"
-     },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e2nr"
+      "deliveryId": "5k.b092eifgt"
      },
-     "_at": 1723524909820,
-     "_step": "step_wellcome_email"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
-     "type": "transition",
+     "type": "cache",
      "values": {
-      "from": "step_wellcome_email",
-      "to": "step_promotion_1",
-      "stepSeq": 2
+      "key": "1:step_process:send_email_wellcome"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532734,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_begin",
      "values": {
       "type": "time",
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524909820,
-     "_step": "step_promotion_1"
+     "_at": 1723533532735,
+     "_step": "step_process"
     },
     {
      "type": "interrupt_end",
      "values": {
-      "resumeId": "wait_before_promotion_email-1i551e2ns"
+      "resumeId": "wait_before_promotion_email-1i559l7hv"
      },
-     "_at": 1723524912224,
-     "_step": "step_promotion_1"
-    },
-    {
-     "type": "cache",
-     "values": {
-      "key": "2:step_promotion_1:send_email"
-     },
-     "_at": 1723524912224,
-     "_step": "step_promotion_1"
+     "_at": 1723533532855,
+     "_step": "step_process"
     },
     {
      "type": "email_sent",
      "values": {
-      "deliveryId": "1i551e530"
+      "deliveryId": "9e.ihf6vtuvk"
      },
-     "_at": 1723524912224,
-     "_step": "step_promotion_1"
+     "_at": 1723533532856,
+     "_step": "step_process"
+    },
+    {
+     "type": "cache",
+     "values": {
+      "key": "1:step_process:send_email_promotion"
+     },
+     "_at": 1723533532856,
+     "_step": "step_process"
     },
     {
      "type": "transition",
      "values": {
-      "from": "step_promotion_1",
+      "from": "step_process",
       "to": "step_end",
-      "stepSeq": 3
+      "stepSeq": 2
      },
-     "_at": 1723524912224,
+     "_at": 1723533532856,
      "_step": "step_end"
     }
    ]

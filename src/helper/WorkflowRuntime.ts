@@ -12,7 +12,7 @@ export interface IStorage<T extends DurableState> {
   load(runId: string): Promise<SnapshotType<T> | null>;
 }
 
-type WorkflowRunResult =
+export type WorkflowRunResult =
   | {
       runId: string;
       status: "need_resume";
@@ -21,6 +21,11 @@ type WorkflowRunResult =
   | {
       runId: string;
       status: "finished";
+    }
+  | {
+      runId: string;
+      status: "error";
+      error?: any;
     };
 
 export class WorkflowRuntime<T extends DurableState> {
@@ -29,27 +34,31 @@ export class WorkflowRuntime<T extends DurableState> {
   async run(ins: T, runId?: string): Promise<WorkflowRunResult> {
     if (!runId) runId = await this.opts.genRunId();
 
-    for await (const it of ins.exec(runId)) {
-      if (it.resumeTrigger) {
-        const resumeId = it.resumeTrigger.resumeId;
-        const resumeEntry = ins.getResume(resumeId);
-        if (!resumeEntry)
-          throw new Error(`ResumeEntry not found resumeId=${resumeId}`);
+    try {
+      for await (const it of ins.exec(runId)) {
+        if (it.resumeTrigger) {
+          const resumeId = it.resumeTrigger.resumeId;
+          const resumeEntry = ins.getResume(resumeId);
+          if (!resumeEntry)
+            throw new Error(`ResumeEntry not found resumeId=${resumeId}`);
 
-        const data = ins.toJSON() as SnapshotType<T>;
-        await this.opts.storage.save(runId, data);
+          const data = ins.toJSON() as SnapshotType<T>;
+          await this.opts.storage.save(runId, data);
 
-        return {
-          runId,
-          status: "need_resume",
-          resumeEntry,
-        };
+          return {
+            runId,
+            status: "need_resume",
+            resumeEntry,
+          };
+        }
       }
-    }
 
-    const data = ins.toJSON() as SnapshotType<T>;
-    await this.opts.storage.save(runId, data);
-    return { runId, status: "finished" };
+      const data = ins.toJSON() as SnapshotType<T>;
+      await this.opts.storage.save(runId, data);
+      return { runId, status: "finished" };
+    } catch (error) {
+      return { runId, status: "error", error };
+    }
   }
 
   async resume(

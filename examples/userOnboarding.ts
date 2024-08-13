@@ -4,13 +4,13 @@ import {
   WorkflowRuntime,
   type IStorage,
   type SnapshotType,
+  type WorkflowRunResult,
   type WorkflowRuntimeOpt,
 } from "../src/helper/WorkflowRuntime";
 
 enum EStep {
   step_begin = "step_begin",
-  step_wellcome_email = "step_wellcome_email",
-  step_promotion_1 = "step_promotion_1",
+  step_process = "step_process",
   step_end = "step_end",
 }
 type TStateShape = {
@@ -48,38 +48,52 @@ class UserOnboardingFlow extends DurableState<EStep, TStateShape, EAuditLog> {
     this.state.userEmail = email;
   }
 
-  private async *step_begin(): StepIt<EStep, EStep.step_wellcome_email> {
-    return { nextStep: EStep.step_wellcome_email };
+  private async *step_begin(): StepIt<EStep, EStep.step_process> {
+    return { nextStep: EStep.step_process };
   }
 
-  private async *step_wellcome_email(): StepIt<EStep, EStep.step_promotion_1> {
-    const res = await this.withAction("send_email", async () => {
-      const deliveryId = Date.now().toString(32);
-      this._debug(`Send wellcome email to ${this.state.userEmail}`);
-      return deliveryId;
-    });
-    if (res.it) yield res.it;
-    this.addLog({ type: "email_sent", values: { deliveryId: res.value } });
-    this.state.waitBeforePromotionEmail = Math.round(Math.random() * 5000);
+  private async *step_process(): StepIt<EStep, EStep.step_end> {
+    // Send wellcome email
+    {
+      const res = await this.withAction("send_email_wellcome", async () => {
+        const deliveryId = performance.now().toString(32);
 
-    return { nextStep: EStep.step_promotion_1 };
-  }
+        this._debug(
+          `Send wellcome email to ${this.state.userEmail}, deliveryId=${deliveryId}`
+        );
+        this.addLog({ type: "email_sent", values: { deliveryId } });
+        this.state.waitBeforePromotionEmail = Math.round(Math.random() * 5000);
 
-  private async *step_promotion_1(): StepIt<EStep, EStep.step_end> {
-    // waiting for 5sec -> send promotion email -> end
-    const waitRes = this.waitForMs(
-      "wait_before_promotion_email",
-      this.state.waitBeforePromotionEmail
-    );
-    if (waitRes.it) yield waitRes.it;
+        return deliveryId;
+      });
+      if (res.it) yield res.it;
+    }
 
-    const res = await this.withAction("send_email", async () => {
-      const deliveryId = Date.now().toString(32);
-      this._debug(`Send promotion email to ${this.state.userEmail}`);
-      return deliveryId;
-    });
-    if (res.it) yield res.it;
-    this.addLog({ type: "email_sent", values: { deliveryId: res.value } });
+    {
+      // waiting for x sec -> send promotion email -> end
+      const waitRes = this.waitForMs(
+        "wait_before_promotion_email",
+        this.state.waitBeforePromotionEmail
+      );
+      if (waitRes.it) {
+        this._debug(`Wait for ${this.state.waitBeforePromotionEmail}ms`);
+        yield waitRes.it;
+      }
+    }
+
+    {
+      const res = await this.withAction("send_email_promotion", async () => {
+        const deliveryId = performance.now().toString(32);
+
+        this._debug(
+          `Send promotion email to ${this.state.userEmail}, deliveryId=${deliveryId}`
+        );
+        this.addLog({ type: "email_sent", values: { deliveryId } });
+
+        return deliveryId;
+      });
+      if (res.it) yield res.it;
+    }
 
     return { nextStep: EStep.step_end };
   }
@@ -98,17 +112,36 @@ async function main() {
   };
   const workflowRuntime = new WorkflowRuntime<UserOnboardingFlow>(opt);
 
+  const scheduleNextRun = async (tmp: WorkflowRunResult) => {
+    switch (tmp.status) {
+      case "need_resume":
+        {
+          if (tmp.resumeEntry.type === "timer") {
+            await Bun.sleep(tmp.resumeEntry.resumeAfter - Date.now());
+            const res = await workflowRuntime.resume(
+              tmp.runId,
+              UserOnboardingFlow,
+              {
+                resumeId: tmp.resumeEntry.resumeId,
+                resumePayload: undefined,
+              }
+            );
+            await scheduleNextRun(res);
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
   const job = async (email: string) => {
     let tmp = await workflowRuntime.run(createWork(email));
-    if (tmp.status === "need_resume") {
-      if (tmp.resumeEntry.type === "timer") {
-        await Bun.sleep(tmp.resumeEntry.resumeAfter - Date.now());
-        await workflowRuntime.resume(tmp.runId, UserOnboardingFlow, {
-          resumeId: tmp.resumeEntry.resumeId,
-          resumePayload: undefined,
-        });
-      }
+    if (tmp.status === "error") {
+      console.error(`error runId=${tmp.runId} - detail=`, tmp);
+      return;
     }
+    await scheduleNextRun(tmp);
   };
 
   const jobs = [];
@@ -117,6 +150,7 @@ async function main() {
   }
   await Promise.allSettled(jobs);
 
+  console.log("all done!");
   await storage.syncToFile();
 }
 
