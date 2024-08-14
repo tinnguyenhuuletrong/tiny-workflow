@@ -1,14 +1,14 @@
 import { readFileSync } from "fs";
 import {
   ClassDeclaration,
-  Identifier,
   MethodDeclaration,
   Project,
   SourceFile,
   SyntaxKind,
-  SyntaxList,
 } from "ts-morph";
 import type { UnionType } from "typescript";
+import { convertTypeToSchema } from "./ts_json_schema";
+import { scan_expression_call } from "./ts_function_scan";
 
 // Visual TS node 😀
 // /../examples/guessGame.ts
@@ -39,15 +39,46 @@ function parseEnum(file: SourceFile, enumName: string) {
   return typeIns?.getStructure().members?.map((itm) => String(itm.name)) ?? [];
 }
 
-function parseTypeShape(file: SourceFile, typeShapeName: string) {
-  const typeIns = file.getTypeAlias(typeShapeName);
-  return typeIns?.getStructure().type;
+function parseTypeShape(
+  project: Project,
+  file: SourceFile,
+  typeShapeName: string
+) {
+  const typeAlias = file.getTypeAliasOrThrow(typeShapeName);
+  const typeChecker = project.getTypeChecker();
+  const node = typeAlias.getNameNode();
+  const type = typeChecker.getTypeAtLocation(typeAlias.getNameNode());
+  return convertTypeToSchema(type, node);
 }
 
-function checkDupActionKey(file: SourceFile, stepName: string) {
-  // const fn = cl.getMethod("step_process");
-  // const tmp = fn?.getBody();
-  // const s = tmp?.getChildren()[1] as SyntaxList;
+function listAllActionKey(
+  cl: ClassDeclaration,
+  stepName: string,
+  methodName: string
+) {
+  const methodDeclaration = cl.getMethodOrThrow(stepName);
+  const allActionCall = scan_expression_call(methodDeclaration, methodName);
+  const allActionKeys = allActionCall.map((itm) => {
+    const tmp = itm.getArguments()?.[0];
+    if (
+      !(
+        tmp &&
+        [
+          SyntaxKind.StringLiteral,
+          SyntaxKind.TemplateExpression,
+          SyntaxKind.NoSubstitutionTemplateLiteral,
+        ].includes(tmp.getKind())
+      )
+    )
+      throw new Error(
+        `stepName=${stepName}, methodName=${methodName}, kind=${tmp?.getKindName()} expected 1st param is actionKey as string`
+      );
+
+    // remove string quote
+    return tmp.getText().slice(1, -1);
+  });
+
+  return allActionKeys;
 }
 
 function doParseWorkflowMetadata(filePath: string) {
@@ -64,18 +95,26 @@ function doParseWorkflowMetadata(filePath: string) {
     .filter((itm) => itm.getKindName() === "MethodDeclaration")
     .map((itm) => itm as MethodDeclaration);
 
-  // console.log(
-  //   "members:",
-  //   members.map((itm) => itm.getName())
-  // );
-
-  // checkDupActionKey(file, "step_process");
+  const eSteps = parseEnum(file, candidateClassTypeArgs[0]);
+  const stepDetail = Object.fromEntries(
+    eSteps.map((stepName) => {
+      return [
+        stepName,
+        {
+          actionKeys: listAllActionKey(cl, stepName, "withAction"),
+          waitMsKeys: listAllActionKey(cl, stepName, "waitForMs"),
+          waitEventKeys: listAllActionKey(cl, stepName, "waitForEvent"),
+        },
+      ];
+    })
+  );
 
   return {
     className: cl.getName(),
-    transitions: members.map(parseStepTransition).filter(Boolean),
-    typeShapeStr: parseTypeShape(file, candidateClassTypeArgs[1]),
     eSteps: parseEnum(file, candidateClassTypeArgs[0]),
+    transitions: members.map(parseStepTransition).filter(Boolean),
+    typeShapeStr: parseTypeShape(project, file, candidateClassTypeArgs[1]),
+    stepDetail,
   };
 }
 
