@@ -1,3 +1,5 @@
+import type { DurableState } from "./DurableState";
+
 export type ContinueTrigger =
   | {
       type: "time";
@@ -60,3 +62,4 @@ export type DurableStateOpt = {
   debug?: boolean;
 };
 export type Constructor<T> = new (...args: any[]) => T;
+export type SnapshotType<T extends DurableState> = ReturnType<T["toJSON"]>;

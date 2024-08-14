@@ -61,6 +61,7 @@ export class DurableState<
     return `${this.stepSeq}:${this.step}`;
   }
 
+  /** Find resumeEntry by Id - return a cloned */
   getResume(resumeId: string) {
     const tmp = Object.values(this.system).find(
       (itm) => itm.resumeId === resumeId
@@ -71,6 +72,14 @@ export class DurableState<
     } as DurableStateSystemEntry;
   }
 
+  /** list all pending resumeEntries - return a cloned list */
+  listPendingResume() {
+    return Object.values(this.system)
+      .filter((itm) => !itm.isDone)
+      .map((itm) => structuredClone(itm));
+  }
+
+  /** resole a resume entry */
   resolveResume(resumeId: string, payload?: any) {
     const tmp = Object.values(this.system).find(
       (itm) => itm.resumeId === resumeId
@@ -317,7 +326,10 @@ export class DurableState<
   }
 
   protected _debug(...args: any[]) {
-    if (this.opt?.debug) console.log(`[DurableState][${this.runId}] `, ...args);
+    if (this.opt?.debug)
+      console.log(
+        `[DurableState][${this.runId}][${this.step}] ${args.join(" ")}`
+      );
   }
 
   private canRetry(

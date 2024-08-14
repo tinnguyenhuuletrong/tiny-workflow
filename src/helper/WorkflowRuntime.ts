@@ -1,7 +1,11 @@
 import { DurableState } from "../DurableState";
-import type { Constructor, DurableStateSystemEntry } from "../type";
+import type {
+  Constructor,
+  DurableStateSystemEntry,
+  SnapshotType,
+} from "../type";
+import { MicroTaskRunner } from "./MicroTaskRunner";
 
-export type SnapshotType<T extends DurableState> = ReturnType<T["toJSON"]>;
 export type WorkflowRuntimeOpt<T extends DurableState> = {
   storage: IStorage<T>;
   genRunId: () => Promise<string>;
@@ -29,6 +33,8 @@ export type WorkflowRunResult =
     };
 
 export class WorkflowRuntime<T extends DurableState> {
+  readonly runner = new MicroTaskRunner();
+
   constructor(private opts: WorkflowRuntimeOpt<T>) {}
 
   async run(ins: T, runId?: string): Promise<WorkflowRunResult> {
@@ -72,12 +78,12 @@ export class WorkflowRuntime<T extends DurableState> {
       resumePayload?: any;
     }
   ) {
-    const ins = await this.getInsByRunId(runId, Cons);
+    const ins = await this.createInstanceByRunId(runId, Cons);
     ins.resolveResume(resumeId, resumePayload);
     return this.run(ins, runId);
   }
 
-  async getInsByRunId(runId: string, Cons: Constructor<T>) {
+  async createInstanceByRunId(runId: string, Cons: Constructor<T>) {
     const data = await this.opts.storage.load(runId);
     if (!data) throw new Error(`snapshotData not found for runId=${runId}`);
     const ins = DurableState.fromJSON(Cons, data) as T;

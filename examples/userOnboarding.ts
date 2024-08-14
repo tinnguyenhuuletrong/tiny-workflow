@@ -1,9 +1,13 @@
-import { DurableState, type StepHandler, type StepIt } from "../src";
+import {
+  DurableState,
+  type SnapshotType,
+  type StepHandler,
+  type StepIt,
+} from "../src";
 import { join } from "path";
 import {
   WorkflowRuntime,
   type IStorage,
-  type SnapshotType,
   type WorkflowRunResult,
   type WorkflowRuntimeOpt,
 } from "../src/helper/WorkflowRuntime";
@@ -16,6 +20,7 @@ enum EStep {
 type TStateShape = {
   userEmail: string;
   waitBeforePromotionEmail: number;
+  waitBeforeEnd: number;
 };
 type EAuditLog = "email_sent" | "email_updated";
 
@@ -70,7 +75,7 @@ class UserOnboardingFlow extends DurableState<EStep, TStateShape, EAuditLog> {
     }
 
     {
-      // waiting for x sec -> send promotion email -> end
+      // waiting for x sec -> send promotion email
       const waitRes = this.waitForMs(
         "wait_before_promotion_email",
         this.state.waitBeforePromotionEmail
@@ -89,10 +94,23 @@ class UserOnboardingFlow extends DurableState<EStep, TStateShape, EAuditLog> {
           `Send promotion email to ${this.state.userEmail}, deliveryId=${deliveryId}`
         );
         this.addLog({ type: "email_sent", values: { deliveryId } });
+        this.state.waitBeforeEnd = Math.round(Math.random() * 2000);
 
         return deliveryId;
       });
       if (res.it) yield res.it;
+    }
+
+    {
+      // waiting for x sec -> end
+      const waitRes = this.waitForMs(
+        "wait_before_end",
+        this.state.waitBeforeEnd
+      );
+      if (waitRes.it) {
+        this._debug(`Wait for ${this.state.waitBeforeEnd}ms`);
+        yield waitRes.it;
+      }
     }
 
     return { nextStep: EStep.step_end };
@@ -111,6 +129,7 @@ async function main() {
     storage,
   };
   const workflowRuntime = new WorkflowRuntime<UserOnboardingFlow>(opt);
+  workflowRuntime.runner.reset();
 
   const scheduleNextRun = async (tmp: WorkflowRunResult) => {
     switch (tmp.status) {
@@ -126,7 +145,7 @@ async function main() {
                 resumePayload: undefined,
               }
             );
-            await scheduleNextRun(res);
+            workflowRuntime.runner.addTask(scheduleNextRun(res));
           }
         }
         break;
@@ -141,15 +160,14 @@ async function main() {
       console.error(`error runId=${tmp.runId} - detail=`, tmp);
       return;
     }
-    await scheduleNextRun(tmp);
+    workflowRuntime.runner.addTask(scheduleNextRun(tmp));
   };
 
-  const jobs = [];
   for (let i = 0; i < 10; i++) {
-    jobs.push(job(`email_${i}@abc.com`));
+    workflowRuntime.runner.addTask(job(`email_${i}@abc.com`));
   }
-  await Promise.allSettled(jobs);
 
+  await workflowRuntime.runner.idle();
   console.log("all done!");
   await storage.syncToFile();
 }
