@@ -1,25 +1,23 @@
+import { join } from "path";
 import {
   DurableState,
   type EventSystemEntry,
   type StepHandler,
   type StepIt,
-} from "../src";
-import { join } from "path";
+} from "tiny-workflow-core/src";
 
 enum EStep {
   step_begin = "step_begin",
-  step_ask = "step_ask",
-  step_check = "step_check",
+  step_play = "step_play",
   step_end = "step_end",
 }
 type TStateShape = {
   number: number;
-  hint: string;
   answer?: number[];
 };
 type EAuditLog = "log";
 
-class GuessGame2State extends DurableState<EStep, TStateShape, EAuditLog> {
+class GuessGameState extends DurableState<EStep, TStateShape, EAuditLog> {
   // Type Safeguard & Auto register
   private _static(key: EStep): StepHandler<EStep> {
     return this[key];
@@ -31,49 +29,45 @@ class GuessGame2State extends DurableState<EStep, TStateShape, EAuditLog> {
   }
   constructor() {
     super(EStep.step_begin, {
-      withAuditLog: true,
+      withAuditLog: false,
       debug: true,
     });
     this._collectAndRegisterSteps();
   }
 
-  private async *step_begin(): StepIt<EStep, EStep.step_ask> {
+  private async *step_begin(): StepIt<EStep, EStep.step_play> {
     const res = await this.withAction("generate_num", async () => {
       return Math.round(Math.random() * 100);
     });
     if (res.it) yield res.it;
     this.state.number = res.value;
-    this.state.hint = `number between 0-100. Empty for simulate save/load`;
-    return { nextStep: EStep.step_ask };
+    return { nextStep: EStep.step_play };
   }
 
-  private async *step_ask(): StepIt<EStep, EStep.step_check> {
-    let answer = this.state.answer ?? [];
-    const hint = this.state.hint;
-    const tmp = this.waitForEvent(`event_ask`, {
-      question: hint,
-    });
-    if (tmp.it) yield tmp.it;
-    const last_answer = tmp.value();
-    answer.push(last_answer);
+  private async *step_play(): StepIt<EStep, EStep.step_end> {
+    let count = 0;
+    let question = `number between 0-100. Empty for simulate save/load`;
+    let answer = [];
+    const guessNum = this.state.number;
+    while (true) {
+      const tmp = this.waitForEvent(`event_ask_${count++}`, {
+        question: `${question}`,
+      });
+      if (tmp.it) yield tmp.it;
+      const last_answer = tmp.value();
+      answer.push(last_answer);
+
+      if (last_answer === guessNum) {
+        break;
+      } else if (last_answer < guessNum) {
+        question = `value ${last_answer} is < than the answer - number between 0-100`;
+      } else {
+        question = `value ${last_answer} is > than the answer - number between 0-100`;
+      }
+    }
     this.state.answer = answer;
 
-    return { nextStep: EStep.step_check };
-  }
-
-  private async *step_check(): StepIt<EStep, EStep.step_end | EStep.step_ask> {
-    const guessNum = this.state.number;
-    const last_answer = this.state.answer?.at(-1);
-    if (!last_answer) throw new Error("OoO last_answer should not null");
-
-    if (last_answer === guessNum) {
-      return { nextStep: EStep.step_end };
-    } else if (last_answer < guessNum) {
-      this.state.hint = `value ${last_answer} is < than the answer - number between 0-100`;
-    } else {
-      this.state.hint = `value ${last_answer} is > than the answer - number between 0-100`;
-    }
-    return { nextStep: EStep.step_ask };
+    return { nextStep: EStep.step_end };
   }
 
   private async *step_end(): StepIt<EStep, null> {
@@ -86,10 +80,8 @@ class GuessGame2State extends DurableState<EStep, TStateShape, EAuditLog> {
   }
 }
 
-type SnapshotType = ReturnType<GuessGame2State["toJSON"]>;
-
 async function main() {
-  let state: SnapshotType | null = null;
+  let state = null;
   while (true) {
     state = await run(state);
     if (!state) return;
@@ -97,14 +89,12 @@ async function main() {
 }
 main();
 
-async function run(state?: SnapshotType | null): Promise<SnapshotType | null> {
-  console.log("🤟 Wellcome to GuessGame_2 🤟");
-
-  let ins!: GuessGame2State;
-  if (!state) ins = new GuessGame2State();
+async function run(state?: any): Promise<Object | null> {
+  let ins!: GuessGameState;
+  if (!state) ins = new GuessGameState();
   else {
     console.log("----- resumed -----");
-    ins = GuessGame2State.fromJSON(GuessGame2State, state, {
+    ins = GuessGameState.fromJSON(GuessGameState, state, {
       withAuditLog: false,
       debug: true,
     });
@@ -129,7 +119,7 @@ async function run(state?: SnapshotType | null): Promise<SnapshotType | null> {
   }
 
   Bun.write(
-    join(__dirname, "./state_2.json"),
+    join(__dirname, "./tmp/state.json"),
     JSON.stringify(ins.toJSON(), null, " ")
   );
   return null;

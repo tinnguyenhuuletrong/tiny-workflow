@@ -1,0 +1,15 @@
+{
+  "name": "tiny-workflow-core",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "build:npm": "bun run ../../tools/buildNPMPackage.ts",
+    "prepack": "bun run build:npm"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

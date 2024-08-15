@@ -1,17 +1,12 @@
 {
   "name": "tiny-workflow",
-  "module": "index.ts",
-  "type": "module",
-  "scripts": {
-    "build:npm": "bun run ./tools/buildNPMPackage.ts",
-    "prepack": "bun run build:npm"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
-    "@types/bun": "latest",
-    "bun-plugin-dts": "^0.2.3",
-    "ts-morph": "^23.0.0"
+    "bun-plugin-dts": "^0.2.3"
   },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
+  "scripts": {
+    "build:npm:all": "bun run --filter 'tiny-workflow*' build:npm"
   }
 }

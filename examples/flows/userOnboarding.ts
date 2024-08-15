@@ -1,16 +1,16 @@
+import { join } from "path";
 import {
   DurableState,
   type SnapshotType,
   type StepHandler,
   type StepIt,
-} from "../src";
-import { join } from "path";
+} from "tiny-workflow-core/src";
 import {
   WorkflowRuntime,
   type IStorage,
   type WorkflowRunResult,
   type WorkflowRuntimeOpt,
-} from "../src/helper/WorkflowRuntime";
+} from "tiny-workflow-core/src/helper/WorkflowRuntime";
 
 enum EStep {
   step_begin = "step_begin",
@@ -193,7 +193,7 @@ class MemStorage implements IStorage<UserOnboardingFlow> {
   }
 
   async syncToFile() {
-    const savePath = join(__dirname, "./userOnboarding_db.json");
+    const savePath = join(__dirname, "./tmp/userOnboarding_db.json");
     Bun.write(savePath, JSON.stringify([...this.db.entries()], null, " "));
   }
 }
