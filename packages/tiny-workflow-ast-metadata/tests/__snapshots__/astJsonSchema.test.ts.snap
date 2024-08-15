@@ -1,0 +1,77 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ast-jsonSchema-test 1`] = `
+{
+  "properties": {
+    "a": {
+      "type": "string",
+    },
+    "b": {
+      "type": "number",
+    },
+    "c": {
+      "items": {
+        "type": "string",
+      },
+      "type": "array",
+    },
+    "d": {
+      "items": {
+        "type": "number",
+      },
+      "type": "array",
+    },
+    "e": {
+      "properties": {
+        "e1": {
+          "type": "string",
+        },
+        "e2": {
+          "enum": [
+            "e2_a",
+            "e2_b",
+          ],
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+    "f": {
+      "properties": {
+        "s1": {
+          "properties": {
+            "s11": {
+              "type": "number",
+            },
+          },
+          "type": "object",
+        },
+        "s2": {
+          "type": "string",
+        },
+      },
+      "type": "object",
+    },
+    "g": {
+      "items": {
+        "properties": {
+          "s1": {
+            "properties": {
+              "s11": {
+                "type": "number",
+              },
+            },
+            "type": "object",
+          },
+          "s2": {
+            "type": "string",
+          },
+        },
+        "type": "object",
+      },
+      "type": "array",
+    },
+  },
+  "type": "object",
+}
+`;

@@ -1,0 +1,8 @@
+// Bun Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ast-jsonSchema-test 1`] = `
+[
+  "k1",
+  "k3",
+]
+`;
