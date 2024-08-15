@@ -57,6 +57,13 @@ export type AuditLogEntry<S, EStep> = {
   _at?: number;
   _step?: EStep;
 };
+export const SystemAuditLogType = [
+  "init",
+  "cache",
+  "transition",
+  "interrupt_begin",
+  "interrupt_end",
+];
 export type DurableStateOpt = {
   withAuditLog: boolean;
   debug?: boolean;

@@ -1,0 +1,217 @@
+[
+ [
+  "run_info@company.com",
+  {
+   "step": "step_end",
+   "state": {
+    "userEmail": "info@company.com",
+    "paymentIntervalMs": 10000,
+    "status": "cancel",
+    "_cycle": 1,
+    "_nextPaymentAt": 1723714110604,
+    "currentUsages": [],
+    "receipts": [
+     {
+      "cycle": 0,
+      "createdAt": 1723714100604,
+      "usages": [
+       {
+        "item": "id_38",
+        "amount": 5
+       },
+       {
+        "item": "id_30",
+        "amount": 2
+       },
+       {
+        "item": "id_57",
+        "amount": 9
+       },
+       {
+        "item": "id_3",
+        "amount": 8
+       },
+       {
+        "item": "id_45",
+        "amount": 7
+       }
+      ],
+      "deliveryId": "1i5alrnbs"
+     },
+     {
+      "cycle": 1,
+      "createdAt": 1723714110607,
+      "usages": [
+       {
+        "item": "id_5",
+        "amount": 9
+       },
+       {
+        "item": "id_68",
+        "amount": 1
+       }
+      ],
+      "deliveryId": "1i5als14f"
+     }
+    ]
+   },
+   "cache": {
+    "_seq": 6,
+    "2:step_send_receipt:send_receipt_email_0": "1i5alrnbs",
+    "5:step_send_receipt:send_receipt_email_1": "1i5als14f"
+   },
+   "system": {
+    "1:step_wait:timer:wait_for_end_cycle_0": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_for_end_cycle_0-1i5alrdjh",
+     "resumeAfter": 1723714100602
+    },
+    "3:step_wait:timer:wait_for_end_cycle_1": {
+     "type": "timer",
+     "isDone": true,
+     "resumeId": "wait_for_end_cycle_1-1i5alrnbt",
+     "resumeAfter": 1723714110604
+    }
+   },
+   "logs": [
+    {
+     "type": "set_param",
+     "values": {
+      "userEmail": "info@company.com",
+      "paymentIntervalMs": 10000
+     },
+     "_at": 1723714090599,
+     "_step": "step_begin"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_38",
+      "amount": 5
+     },
+     "_at": 1723714092889,
+     "_step": "step_wait"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_30",
+      "amount": 2
+     },
+     "_at": 1723714092889,
+     "_step": "step_wait"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_57",
+      "amount": 9
+     },
+     "_at": 1723714092889,
+     "_step": "step_wait"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_3",
+      "amount": 8
+     },
+     "_at": 1723714092889,
+     "_step": "step_wait"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_45",
+      "amount": 7
+     },
+     "_at": 1723714092889,
+     "_step": "step_wait"
+    },
+    {
+     "type": "bill_sent",
+     "values": {
+      "receipt": {
+       "cycle": 0,
+       "createdAt": 1723714100604,
+       "usages": [
+        {
+         "item": "id_38",
+         "amount": 5
+        },
+        {
+         "item": "id_30",
+         "amount": 2
+        },
+        {
+         "item": "id_57",
+         "amount": 9
+        },
+        {
+         "item": "id_3",
+         "amount": 8
+        },
+        {
+         "item": "id_45",
+         "amount": 7
+        }
+       ],
+       "deliveryId": "1i5alrnbs"
+      },
+      "deliveryId": "1i5alrnbs"
+     },
+     "_at": 1723714100605,
+     "_step": "step_send_receipt"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_5",
+      "amount": 9
+     },
+     "_at": 1723714103139,
+     "_step": "step_wait"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_68",
+      "amount": 1
+     },
+     "_at": 1723714103139,
+     "_step": "step_wait"
+    },
+    {
+     "type": "cancel",
+     "values": {},
+     "_at": 1723714105145,
+     "_step": "step_wait"
+    },
+    {
+     "type": "bill_sent",
+     "values": {
+      "receipt": {
+       "cycle": 1,
+       "createdAt": 1723714110607,
+       "usages": [
+        {
+         "item": "id_5",
+         "amount": 9
+        },
+        {
+         "item": "id_68",
+         "amount": 1
+        }
+       ],
+       "deliveryId": "1i5als14f"
+      },
+      "deliveryId": "1i5als14f"
+     },
+     "_at": 1723714110607,
+     "_step": "step_send_receipt"
+    }
+   ]
+  }
+ ]
+]

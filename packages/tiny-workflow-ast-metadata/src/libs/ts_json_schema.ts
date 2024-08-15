@@ -20,6 +20,9 @@ export function convertTypeToSchema(type: Type, node: Node): any {
       const propType = prop.getTypeAtLocation(node);
       schema.properties[prop.getName()] = convertTypeToSchema(propType, node);
     }
+  } else if (type.isUnion()) {
+    schema.type = "string";
+    schema.enum = type.getUnionTypes().map((itm) => itm.getText().slice(1, -1));
   } else {
     schema.type = "unknown";
   }

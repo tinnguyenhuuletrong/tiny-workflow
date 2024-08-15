@@ -1,12 +1,13 @@
-import type {
-  AuditLogEntry,
-  DurableStateSystemEntry,
-  StepHandler,
-  DurableStateOpt,
-  DurableStateIterator,
-  DurableStateReturn,
-  ExeOpt,
-  Constructor,
+import {
+  type AuditLogEntry,
+  type DurableStateSystemEntry,
+  type StepHandler,
+  type DurableStateOpt,
+  type DurableStateIterator,
+  type DurableStateReturn,
+  type ExeOpt,
+  type Constructor,
+  SystemAuditLogType,
 } from "./type";
 
 const SYSTEM_SEQ_KEY = "_seq";
@@ -318,11 +319,16 @@ export class DurableState<
   }
 
   protected addLog(itm: AuditLogEntry<ExtAuditLogType, EStep>) {
-    if (this.opt?.withAuditLog) {
-      itm._at = this.nowMs();
-      itm._step = this.step;
-      this.logs.push(itm);
+    if (
+      !this.opt?.withAuditLog &&
+      SystemAuditLogType.includes(itm.type as string)
+    ) {
+      return;
     }
+
+    itm._at = this.nowMs();
+    itm._step = this.step;
+    this.logs.push(itm);
   }
 
   protected _debug(...args: any[]) {
