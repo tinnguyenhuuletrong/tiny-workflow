@@ -1,16 +1,13 @@
 import { join } from "path";
 import {
   DurableState,
-  type SnapshotType,
+  SimpleContext,
+  WorkflowRuntime,
   type StepHandler,
   type StepIt,
-} from "tiny-workflow-core/src";
-import {
-  WorkflowRuntime,
-  type IStorage,
   type WorkflowRunResult,
   type WorkflowRuntimeOpt,
-} from "tiny-workflow-core/src/helper/WorkflowRuntime";
+} from "tiny-workflow-core/src";
 
 enum EStep {
   step_begin = "step_begin",
@@ -121,15 +118,33 @@ class UserOnboardingFlow extends DurableState<EStep, TStateShape, EAuditLog> {
   }
 }
 
+class MemContext extends SimpleContext<UserOnboardingFlow> {
+  async lock(runId: string) {
+    await super.lock(runId);
+    console.info("\x1b[34m", `[ 🔒 ] - ${runId}`, "\x1b[0m");
+  }
+
+  async unlock(runId: string) {
+    await super.unlock(runId);
+    console.info("\x1b[34m", `[ 🗝️ ] - ${runId}`, "\x1b[0m");
+  }
+
+  async syncDBToFile() {
+    const savePath = join(__dirname, "./tmp/userOnboarding_db.json");
+    Bun.write(savePath, JSON.stringify([...this.db.entries()], null, " "));
+  }
+}
+
 async function main() {
-  const storage = new MemStorage();
+  const ctx = new MemContext();
   let count = 0;
   const opt: WorkflowRuntimeOpt<UserOnboardingFlow> = {
     genRunId: async () => `r_${count++}`,
-    storage,
+    ctx,
+    InstanceClass: UserOnboardingFlow,
   };
   const workflowRuntime = new WorkflowRuntime<UserOnboardingFlow>(opt);
-  workflowRuntime.runner.reset();
+  ctx.runner.reset();
 
   const scheduleNextRun = async (tmp: WorkflowRunResult) => {
     switch (tmp.status) {
@@ -137,15 +152,13 @@ async function main() {
         {
           if (tmp.resumeEntry.type === "timer") {
             await Bun.sleep(tmp.resumeEntry.resumeAfter - Date.now());
-            const res = await workflowRuntime.resume(
-              tmp.runId,
-              UserOnboardingFlow,
-              {
-                resumeId: tmp.resumeEntry.resumeId,
-                resumePayload: undefined,
-              }
-            );
-            workflowRuntime.runner.addTask(scheduleNextRun(res));
+            const res = await workflowRuntime.resume(tmp.runId, {
+              resumeId: tmp.resumeEntry.resumeId,
+              resumePayload: undefined,
+            });
+            ctx.runner.addTask(scheduleNextRun(res), {
+              runId: tmp.runId,
+            });
           }
         }
         break;
@@ -160,16 +173,16 @@ async function main() {
       console.error(`error runId=${tmp.runId} - detail=`, tmp);
       return;
     }
-    workflowRuntime.runner.addTask(scheduleNextRun(tmp));
+    ctx.runner.addTask(scheduleNextRun(tmp), { runId: tmp.runId });
   };
 
   for (let i = 0; i < 10; i++) {
-    workflowRuntime.runner.addTask(job(`email_${i}@abc.com`));
+    ctx.runner.addTask(job(`email_${i}@abc.com`));
   }
 
-  await workflowRuntime.runner.idle();
+  await ctx.runner.idle();
   console.log("all done!");
-  await storage.syncToFile();
+  await ctx.syncDBToFile();
 }
 
 main();
@@ -178,22 +191,4 @@ function createWork(email: string) {
   const ins = new UserOnboardingFlow();
   ins.setEmail(email);
   return ins;
-}
-
-class MemStorage implements IStorage<UserOnboardingFlow> {
-  private db = new Map<string, SnapshotType<UserOnboardingFlow>>();
-
-  async save(runId: string, snapshotData: SnapshotType<UserOnboardingFlow>) {
-    this.db.set(runId, snapshotData);
-  }
-  async load(runId: string) {
-    const tmp = this.db.get(runId);
-    if (!tmp) return null;
-    return tmp;
-  }
-
-  async syncToFile() {
-    const savePath = join(__dirname, "./tmp/userOnboarding_db.json");
-    Bun.write(savePath, JSON.stringify([...this.db.entries()], null, " "));
-  }
 }

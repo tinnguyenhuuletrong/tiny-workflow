@@ -1,16 +1,12 @@
 import { join } from "path";
 import {
   DurableState,
-  type SnapshotType,
+  SimpleContext,
+  WorkflowRuntime,
   type StepHandler,
   type StepIt,
-} from "tiny-workflow-core/src";
-import {
-  WorkflowRuntime,
-  type IStorage,
-  type WorkflowRunResult,
   type WorkflowRuntimeOpt,
-} from "tiny-workflow-core/src/helper/WorkflowRuntime";
+} from "tiny-workflow-core/src";
 
 enum EStep {
   step_begin = "step_begin",
@@ -64,7 +60,6 @@ class IntervalPaymentFlow extends DurableState<EStep, TStateShape, EAuditLog> {
 
   setParam(tmp: Pick<TStateShape, "userEmail" | "paymentIntervalMs">) {
     this.state = { ...this.state, ...tmp };
-
     this.addLog({
       type: "set_param",
       values: {
@@ -73,7 +68,7 @@ class IntervalPaymentFlow extends DurableState<EStep, TStateShape, EAuditLog> {
     });
   }
 
-  addUsage(usageItem: UsageItem) {
+  actionAddUsage(usageItem: UsageItem) {
     if (this.state.status != "active")
       throw new Error("status is not active. can not process");
 
@@ -86,7 +81,7 @@ class IntervalPaymentFlow extends DurableState<EStep, TStateShape, EAuditLog> {
     });
   }
 
-  cancel() {
+  actionCancel() {
     if (this.state.status != "active")
       throw new Error("status is not active. can not process");
 
@@ -222,16 +217,39 @@ class IntervalPaymentFlow extends DurableState<EStep, TStateShape, EAuditLog> {
   }
 }
 
+class MemContext<T extends DurableState> extends SimpleContext<T> {
+  async lock(runId: string) {
+    await super.lock(runId);
+    console.info("\x1b[34m", `[ 🔒 ] - ${runId}`, "\x1b[0m");
+  }
+
+  async unlock(runId: string) {
+    await super.unlock(runId);
+    console.info("\x1b[34m", `[ 🗝️ ] - ${runId}`, "\x1b[0m");
+  }
+
+  async shutdown() {
+    await super.shutdown();
+    await this.syncDBToFile();
+  }
+
+  async syncDBToFile() {
+    const savePath = join(__dirname, "./tmp/intervalPayment_db.json");
+    Bun.write(savePath, JSON.stringify([...this.db.entries()], null, " "));
+    console.log("db synced: ", savePath);
+  }
+}
+
 async function main() {
-  const storage = new MemStorage();
+  const ctx = new MemContext<IntervalPaymentFlow>();
   let count = 0;
   const opt: WorkflowRuntimeOpt<IntervalPaymentFlow> = {
+    ctx,
     genRunId: async () => `r_${count++}`,
-    storage,
+    InstanceClass: IntervalPaymentFlow,
   };
-
-  const workflowRuntime = new WorkflowRuntime<IntervalPaymentFlow>(opt);
-  workflowRuntime.runner.reset();
+  new WorkflowRuntime<IntervalPaymentFlow>(opt);
+  await ctx.start();
 
   const ins = new IntervalPaymentFlow();
   ins.setParam({
@@ -239,62 +257,41 @@ async function main() {
     paymentIntervalMs: 10_000,
   });
 
+  // Unique runId per user
   const runId = `run_${ins.currentState.userEmail}`;
-  workflowRuntime.runner.addTask(runBackground(runId, workflowRuntime, ins));
-  workflowRuntime.runner.addTask(runFrontend(runId, storage, workflowRuntime));
 
-  await workflowRuntime.runner.idle();
+  // Workflow run on server side
+  await ctx.runner.addTask(runBackground(runId, ctx, ins), {
+    runId,
+  });
+
+  // User terminal interface
+  ctx.runner.addTask(runFrontend(runId, ctx), {
+    runId,
+  });
+
+  await ctx.runner.idle();
   console.log("all done");
+
+  await ctx.shutdown();
 }
 main();
 
-async function scheduleNextRun(
-  runId: string,
-  workflowRuntime: WorkflowRuntime<IntervalPaymentFlow>,
-  tmp: WorkflowRunResult
-) {
-  switch (tmp.status) {
-    case "need_resume":
-      {
-        if (tmp.resumeEntry.type === "timer") {
-          await Bun.sleep(tmp.resumeEntry.resumeAfter - Date.now());
-          const res = await workflowRuntime.resume(runId, IntervalPaymentFlow, {
-            resumeId: tmp.resumeEntry.resumeId,
-            resumePayload: undefined,
-          });
-          if (res.status === "error") {
-            console.error(`error runId=${runId} - detail=`, res);
-            return;
-          }
-          workflowRuntime.runner.addTask(
-            scheduleNextRun(runId, workflowRuntime, res)
-          );
-        }
-      }
-      break;
-    default:
-      break;
-  }
-}
-
 async function runBackground(
   runId: string,
-  workflowRuntime: WorkflowRuntime<IntervalPaymentFlow>,
+  ctx: MemContext<IntervalPaymentFlow>,
   ins: IntervalPaymentFlow
 ) {
-  let tmp = await workflowRuntime.run(ins, runId);
-  if (tmp.status === "error") {
-    console.error(`error runId=${tmp.runId} - detail=`, tmp);
-    return;
-  }
-  workflowRuntime.runner.addTask(scheduleNextRun(runId, workflowRuntime, tmp));
+  let tmp = await ctx.runtime.run(ins, runId);
+  ctx.runner.addTask(ctx.scheduleNextRun(runId, tmp), {
+    runId,
+  });
   return runId;
 }
 
 async function runFrontend(
   runId: string,
-  storage: MemStorage,
-  workflowRuntime: WorkflowRuntime<IntervalPaymentFlow>
+  ctx: MemContext<IntervalPaymentFlow>
 ) {
   const usage = `
   /state:         print state as json
@@ -303,7 +300,7 @@ async function runFrontend(
   /cancel:        cancel
   /exit:          exit
   `;
-  console.log("🤟 Wellcome to IntervalPayment 🤟");
+  console.log(`🤟 Wellcome ${"info@company.com"} to IntervalPayment 🤟`);
   console.log(usage);
 
   type cmdType = "/state" | "/add" | "/save" | "/exit" | "/cancel";
@@ -316,53 +313,57 @@ async function runFrontend(
     switch (cmd) {
       case "/state":
         {
-          const ins = await workflowRuntime.createInstanceByRunId(
+          const ins = await ctx.runtime.createInstanceByRunId(
             runId,
             IntervalPaymentFlow
           );
           console.log({
             step: ins.currentStep,
             state: ins.currentState,
-            runtimeUsage: workflowRuntime.runner.stats(),
+            runtimeUsage: ctx.runner.stats(),
           });
         }
         continue;
       case "/add": {
         {
-          const ins = await workflowRuntime.createInstanceByRunId(
-            runId,
-            IntervalPaymentFlow
-          );
           const sample = parseInt(args[0] ?? "1");
 
-          for (let i = 0; i < sample; i++) {
-            const item = `id_${Math.round(Math.random() * 100)}`;
-            const amount = Math.round(Math.random() * 10);
-            ins.addUsage({
-              item,
-              amount,
-            });
-            console.log(`add usage ${item} - ${amount}`);
-          }
+          ctx.withTransaction(runId, async () => {
+            const ins = await ctx.runtime.createInstanceByRunId(
+              runId,
+              IntervalPaymentFlow
+            );
+            for (let i = 0; i < sample; i++) {
+              const item = `id_${Math.round(Math.random() * 100)}`;
+              const amount = Math.round(Math.random() * 10);
+              ins.actionAddUsage({
+                item,
+                amount,
+              });
+              console.log(`add usage ${item} - ${amount}`);
+            }
+          });
         }
         continue;
       }
 
       case "/save":
         {
-          storage.syncToFile();
+          ctx.syncDBToFile();
           console.log("saved");
         }
         continue;
 
       case "/cancel":
         {
-          const ins = await workflowRuntime.createInstanceByRunId(
-            runId,
-            IntervalPaymentFlow
-          );
-          ins.cancel();
-          console.log("canceled");
+          ctx.withTransaction(runId, async () => {
+            const ins = await ctx.runtime.createInstanceByRunId(
+              runId,
+              IntervalPaymentFlow
+            );
+            ins.actionCancel();
+            console.log("canceled");
+          });
         }
         return;
 
@@ -373,23 +374,5 @@ async function runFrontend(
       default:
         console.log(usage);
     }
-  }
-}
-
-class MemStorage implements IStorage<IntervalPaymentFlow> {
-  private db = new Map<string, SnapshotType<IntervalPaymentFlow>>();
-
-  async save(runId: string, snapshotData: SnapshotType<IntervalPaymentFlow>) {
-    this.db.set(runId, snapshotData);
-  }
-  async load(runId: string) {
-    const tmp = this.db.get(runId);
-    if (!tmp) return null;
-    return tmp;
-  }
-
-  async syncToFile() {
-    const savePath = join(__dirname, "./tmp/intervalPayment_db.json");
-    Bun.write(savePath, JSON.stringify([...this.db.entries()], null, " "));
   }
 }

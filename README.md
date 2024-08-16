@@ -26,8 +26,6 @@ bun run build:npm
 
 ## TODO
 
-- Support Runtime, Context, Storage
-
 - web component to
   - input flow metadata, flow state log
   - display transition, state, ...
