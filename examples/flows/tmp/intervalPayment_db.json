@@ -8,54 +8,46 @@
     "paymentIntervalMs": 10000,
     "status": "cancel",
     "_cycle": 1,
-    "_nextPaymentAt": 1723789955082,
+    "_nextPaymentAt": 1723991753520,
     "currentUsages": [],
     "receipts": [
      {
-      "cycle": 1,
-      "createdAt": 1723789955084,
+      "cycle": 0,
+      "createdAt": 1723991743520,
       "usages": [
        {
-        "item": "id_63",
-        "amount": 2
+        "item": "id_19",
+        "amount": 1
        },
        {
-        "item": "id_77",
-        "amount": 10
-       },
-       {
-        "item": "id_35",
-        "amount": 5
-       },
-       {
-        "item": "id_53",
+        "item": "id_42",
         "amount": 9
        },
        {
-        "item": "id_52",
-        "amount": 1
+        "item": "id_90",
+        "amount": 10
        }
       ],
-      "deliveryId": "1i5cu6k0d"
+      "deliveryId": "1i5iukn11"
      }
     ]
    },
    "cache": {
-    "_seq": 4,
-    "3:step_send_receipt:send_receipt_email_1": "1i5cu6k0d"
+    "_seq": 5,
+    "2:step_send_receipt:send_receipt_email_0": "1i5iukn11"
    },
    "system": {
     "1:step_wait:timer:wait_for_end_cycle_0": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_for_end_cycle_0-1i5cu60f6",
-     "resumeAfter": 1723789945077
+     "resumeId": "wait_for_end_cycle_0-1i5iukd8c",
+     "resumeAfter": 1723991743515
     },
-    "1:step_wait:timer:wait_for_end_cycle_1": {
+    "3:step_wait:timer:wait_for_end_cycle_1": {
      "type": "timer",
      "isDone": true,
-     "resumeId": "wait_for_end_cycle_1-1i5cu6a7q",
-     "resumeAfter": 1723789955082
+     "resumeId": "wait_for_end_cycle_1-1i5iukn12",
+     "resumeAfter": 1723991753520
     }
    },
    "logs": [
@@ -65,92 +57,66 @@
       "userEmail": "info@company.com",
       "paymentIntervalMs": 10000
      },
-     "_at": 1723789935076,
+     "_at": 1723991733508,
      "_step": "step_begin"
     },
     {
      "type": "add_usage",
      "values": {
-      "item": "id_63",
-      "amount": 2
-     },
-     "_at": 1723789948697,
-     "_step": "step_wait"
-    },
-    {
-     "type": "add_usage",
-     "values": {
-      "item": "id_77",
-      "amount": 10
-     },
-     "_at": 1723789948697,
-     "_step": "step_wait"
-    },
-    {
-     "type": "add_usage",
-     "values": {
-      "item": "id_35",
-      "amount": 5
-     },
-     "_at": 1723789948698,
-     "_step": "step_wait"
-    },
-    {
-     "type": "add_usage",
-     "values": {
-      "item": "id_53",
-      "amount": 9
-     },
-     "_at": 1723789948698,
-     "_step": "step_wait"
-    },
-    {
-     "type": "add_usage",
-     "values": {
-      "item": "id_52",
+      "item": "id_19",
       "amount": 1
      },
-     "_at": 1723789948698,
+     "_at": 1723991736996,
      "_step": "step_wait"
     },
     {
-     "type": "cancel",
-     "values": {},
-     "_at": 1723789953700,
+     "type": "add_usage",
+     "values": {
+      "item": "id_42",
+      "amount": 9
+     },
+     "_at": 1723991736996,
+     "_step": "step_wait"
+    },
+    {
+     "type": "add_usage",
+     "values": {
+      "item": "id_90",
+      "amount": 10
+     },
+     "_at": 1723991736996,
      "_step": "step_wait"
     },
     {
      "type": "bill_sent",
      "values": {
       "receipt": {
-       "cycle": 1,
-       "createdAt": 1723789955084,
+       "cycle": 0,
+       "createdAt": 1723991743520,
        "usages": [
         {
-         "item": "id_63",
-         "amount": 2
+         "item": "id_19",
+         "amount": 1
         },
         {
-         "item": "id_77",
-         "amount": 10
-        },
-        {
-         "item": "id_35",
-         "amount": 5
-        },
-        {
-         "item": "id_53",
+         "item": "id_42",
          "amount": 9
         },
         {
-         "item": "id_52",
-         "amount": 1
+         "item": "id_90",
+         "amount": 10
         }
        ]
       }
      },
-     "_at": 1723789955085,
+     "_at": 1723991743522,
      "_step": "step_send_receipt"
+    },
+    {
+     "type": "cancel",
+     "values": {},
+     "_at": 1723991751502,
+     "_step": "step_wait"
     }
    ]
   }
