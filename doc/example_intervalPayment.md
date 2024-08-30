@@ -1,4 +1,4 @@
-# Quick Start Guide for Tiny Workflow
+# Subscription payment with Tiny Workflow
 
 This guide will help you get started with the **tiny-workflow** package by walking you through setting up and running an example workflow.
 
