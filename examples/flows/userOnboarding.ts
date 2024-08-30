@@ -146,34 +146,13 @@ async function main() {
   const workflowRuntime = new WorkflowRuntime<UserOnboardingFlow>(opt);
   ctx.runner.reset();
 
-  const scheduleNextRun = async (tmp: WorkflowRunResult) => {
-    switch (tmp.status) {
-      case "need_resume":
-        {
-          if (tmp.resumeEntry.type === "timer") {
-            await Bun.sleep(tmp.resumeEntry.resumeAfter - Date.now());
-            const res = await workflowRuntime.resume(tmp.runId, {
-              resumeId: tmp.resumeEntry.resumeId,
-              resumePayload: undefined,
-            });
-            ctx.runner.addTask(scheduleNextRun(res), {
-              runId: tmp.runId,
-            });
-          }
-        }
-        break;
-      default:
-        break;
-    }
-  };
-
   const job = async (email: string) => {
     let tmp = await workflowRuntime.run(createWork(email));
     if (tmp.status === "error") {
       console.error(`error runId=${tmp.runId} - detail=`, tmp);
       return;
     }
-    ctx.runner.addTask(scheduleNextRun(tmp), { runId: tmp.runId });
+    await ctx.scheduleNextRun(tmp.runId, tmp);
   };
 
   for (let i = 0; i < 10; i++) {

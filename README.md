@@ -184,8 +184,71 @@ finalWorkflowData: {
 ## More examples:
 
 - [Guess My Number Game](examples/flows/guessGame_2.ts) -  Play the "Guess My Number" game in the terminal.
+
+```sh
+> bun run examples/flows/guessGame_2.ts
+
+🤟 Wellcome to GuessGame_2 🤟
+[DurableState][1i6h4ac2q][step_begin] start
+number between 0-100. Empty for simulate save/load: [] 50
+value 50 is < than the answer - number between 0-100: []
+----- saved -----
+[DurableState][1i6h4ac2q][step_ask] end
+🤟 Wellcome to GuessGame_2 🤟
+----- resumed -----
+[DurableState][1i6h4afb2][step_ask] start
+value 50 is < than the answer - number between 0-100: [] 75
+value 75 is > than the answer - number between 0-100: []
+----- saved -----
+[DurableState][1i6h4afb2][step_ask] end
+🤟 Wellcome to GuessGame_2 🤟
+----- resumed -----
+[DurableState][1i6h4ap6b][step_ask] start
+value 75 is > than the answer - number between 0-100: [] 60
+value 60 is < than the answer - number between 0-100: [] 80
+value 80 is > than the answer - number between 0-100: [] 73
+You need 5 rounds to guess the number 73. Congratulation!: []
+[DurableState][1i6h4ap6b][step_end] end
+```
+
 - [User Onboarding email](examples/flows/userOnboarding.ts) -  Manage multiple asynchronous workflows (one workflow per user).
 
+```sh
+> bun run examples/flows/userOnboarding.ts
+ [ 🔒 ] - r_0
+ [ 🔒 ] - r_1
+[DurableState][r_0][step_begin] start
+[DurableState][r_1][step_begin] start
+[DurableState][r_0][step_process] Send wellcome email to email_0@abc.com, deliveryId=m.uca8etk1cs
+[DurableState][r_1][step_process] Send wellcome email to email_1@abc.com, deliveryId=n.38ddch8ric
+[DurableState][r_0][step_process] Wait for 692ms
+[DurableState][r_1][step_process] Wait for 4244ms
+[DurableState][r_0][step_process] end
+[DurableState][r_1][step_process] end
+ [ 🗝️ ] - r_0
+ [ 🗝️ ] - r_1
+ [ 🔒 ] - r_0
+[DurableState][r_0][step_process] start
+[DurableState][r_0][step_process] Send promotion email to email_0@abc.com, deliveryId=mh.buious91k
+[DurableState][r_0][step_process] Wait for 1434ms
+[DurableState][r_0][step_process] end
+ [ 🗝️ ] - r_0
+ [ 🔒 ] - r_0
+[DurableState][r_0][step_process] start
+[DurableState][r_0][step_end] end
+ [ 🗝️ ] - r_0
+ [ 🔒 ] - r_1
+[DurableState][r_1][step_process] start
+[DurableState][r_1][step_process] Send promotion email to email_1@abc.com, deliveryId=45f.62q3im0g
+[DurableState][r_1][step_process] Wait for 690ms
+[DurableState][r_1][step_process] end
+ [ 🗝️ ] - r_1
+ [ 🔒 ] - r_1
+[DurableState][r_1][step_process] start
+[DurableState][r_1][step_end] end
+ [ 🗝️ ] - r_1
+all done!
+```
 
 ## Development
 

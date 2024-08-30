@@ -110,7 +110,7 @@ export class SimpleContext<T extends DurableState>
 
             default:
               throw new Error(
-                `can not handle resumeType=${result.resumeEntry.type}`
+                `can not handle resumeType=${result.resumeEntry.type}. consider to extend this class to add more logic`
               );
           }
         }
