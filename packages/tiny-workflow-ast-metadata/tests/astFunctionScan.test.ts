@@ -1,7 +1,7 @@
 import { test, expect, mock } from "bun:test";
 
 import { scan_expression_call } from "../src/libs/ts_function_scan";
-import { Project } from "ts-morph";
+import { Project, SyntaxKind } from "ts-morph";
 
 test("ast-jsonSchema-test", async () => {
   const code = `

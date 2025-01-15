@@ -34,12 +34,21 @@ export function parseWorkflowMetadata(code: string): TWFMetaSourceScanResult {
   const eSteps = parseEnum(file, candidateClassTypeArgs[0]);
   const stepDetail = Object.fromEntries(
     eSteps.map((stepName) => {
+      const actionKeys = listAllActionKey(cl, stepName, "withAction");
+      const waitMsKeys = listAllActionKey(cl, stepName, "waitForMs");
+      const waitEventKeys = listAllActionKey(cl, stepName, "waitForEvent");
+
+      const ordered = [...actionKeys, ...waitMsKeys, ...waitEventKeys]
+        .sort((a, b) => a.pos - b.pos)
+        .map((itm) => itm.name);
+
       return [
         stepName,
         {
-          actionKeys: listAllActionKey(cl, stepName, "withAction"),
-          waitMsKeys: listAllActionKey(cl, stepName, "waitForMs"),
-          waitEventKeys: listAllActionKey(cl, stepName, "waitForEvent"),
+          actionKeys: actionKeys.map((itm) => itm.name),
+          waitMsKeys: waitMsKeys.map((itm) => itm.name),
+          waitEventKeys: waitEventKeys.map((itm) => itm.name),
+          ordered,
         },
       ];
     })
@@ -144,7 +153,10 @@ function listAllActionKey(
       );
 
     // remove string quote
-    return tmp.getText().slice(1, -1);
+    return {
+      name: tmp.getText().slice(1, -1),
+      pos: tmp.getPos(),
+    };
   });
 
   return allActionKeys;
