@@ -13,8 +13,10 @@ type TaskInfo = {
   ctx?: Record<string, any>;
 };
 
+type TaskSequence = TaskInfo[];
+
 type TStateShape = Partial<{
-  chain: TaskInfo[];
+  sequences: TaskSequence[];
 }>;
 
 // additional audit log message
@@ -50,46 +52,17 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
     EStep,
     EStep.step_end | EStep.step_process
   > {
-    const chain = this.state.chain ?? [];
+    const sequences = this.state.sequences ?? [];
 
-    // any processing -> process
-    const itmProcessing = chain.find((itm) => itm.status === "processing");
-    if (itmProcessing) {
-      while (true) {
-        const nextStatus = await this.logicHandler.pollStatus(itmProcessing);
-        itmProcessing.status = nextStatus;
-        if (nextStatus === "end") {
-          this.addLog({
-            type: "end_hit",
-            values: {
-              id: itmProcessing.id,
-            },
-          });
-          break;
-        }
+    const tasks = sequences.map((chain) => this._processOneChain(chain));
 
-        yield {
-          canContinue: true,
-          activeStep: EStep.step_process,
-        };
-      }
-    }
+    while (!this.allDone) {
+      await Promise.allSettled(tasks.map((itm) => itm.next()));
 
-    // find a new one to start
-    const nextItm = chain.find(
-      (itm) => itm.status === "waiting" || itm.status === undefined
-    );
-    if (nextItm) {
-      await this.logicHandler.doStart(nextItm);
-      nextItm.status = "processing";
-      this.addLog({
-        type: "start_hit",
-        values: {
-          id: nextItm.id,
-        },
-      });
-
-      return { nextStep: EStep.step_process };
+      yield {
+        canContinue: false,
+        activeStep: EStep.step_process,
+      };
     }
 
     return { nextStep: EStep.step_end };
@@ -98,29 +71,86 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
   private async *step_end(): StepIt<EStep, null> {
     return { nextStep: null };
   }
+
+  private async *_processOneChain(chain: TaskInfo[]) {
+    for (let i = 0; i < chain.length; i++) {
+      const itm = chain[i];
+      if (itm.status === "end") continue;
+
+      const isWaiting = itm.status === "waiting" || itm.status === undefined;
+      if (isWaiting) {
+        await this.logicHandler.doStart(itm);
+        this.addLog({
+          type: "start_hit",
+          values: {
+            id: itm.id,
+          },
+        });
+        yield;
+      }
+
+      // poll
+      const nextStatus = await this.logicHandler.pollStatus(itm);
+      itm.status = nextStatus;
+      if (nextStatus === "end") {
+        this.addLog({
+          type: "end_hit",
+          values: {
+            id: itm.id,
+          },
+        });
+        continue;
+      }
+
+      yield;
+      i--;
+    }
+  }
+
+  public get allDone() {
+    const sequences = this.state.sequences ?? [];
+    return sequences.every(this.isOneChainDone);
+  }
+
+  private isOneChainDone(chain: TaskInfo[]) {
+    return chain.every((itm) => itm.status === "end");
+  }
 }
 
 async function main() {
   const taskState: TStateShape = {
-    chain: [
-      {
-        id: "t1",
-        ctx: {
-          _doneAt: Date.now() + 1000,
+    sequences: [
+      // c1
+      [
+        {
+          id: "t1_1",
+          ctx: {
+            _doneAt: Date.now() + 1000,
+          },
         },
-      },
-      {
-        id: "t2",
-        ctx: {
-          _doneAt: Date.now() + 2000,
+        {
+          id: "t1_2",
+          ctx: {
+            _doneAt: Date.now() + 2000,
+          },
         },
-      },
-      {
-        id: "t3",
-        ctx: {
-          _doneAt: Date.now() + 3000,
+        {
+          id: "t1_3",
+          ctx: {
+            _doneAt: Date.now() + 3000,
+          },
         },
-      },
+      ],
+
+      // c2
+      [
+        {
+          id: "t2_1",
+          ctx: {
+            _doneAt: Date.now() + 2000,
+          },
+        },
+      ],
     ],
   };
 
@@ -141,9 +171,11 @@ async function main() {
   for await (const it of ins.exec()) {
     const breakTime = 500;
     console.log(`\t take a break. poll again after ${breakTime} ms`);
+    console.dir(ins.currentState.sequences, { depth: 10 });
     await setTimeout(breakTime);
   }
 
+  console.log("allDone:", ins.allDone);
   console.dir(ins.toJSON(), { depth: 10 });
 }
 
