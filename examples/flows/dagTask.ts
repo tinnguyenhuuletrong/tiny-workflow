@@ -80,26 +80,26 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
       const isWaiting = itm.status === "waiting" || itm.status === undefined;
       if (isWaiting) {
         await this.logicHandler.doStart(itm);
+        itm.status = "processing";
         this.addLog({
           type: "start_hit",
           values: {
             id: itm.id,
           },
         });
-        yield;
-      }
-
-      // poll
-      const nextStatus = await this.logicHandler.pollStatus(itm);
-      itm.status = nextStatus;
-      if (nextStatus === "end") {
-        this.addLog({
-          type: "end_hit",
-          values: {
-            id: itm.id,
-          },
-        });
-        continue;
+      } else {
+        // poll
+        const nextStatus = await this.logicHandler.pollStatus(itm);
+        itm.status = nextStatus;
+        if (nextStatus === "end") {
+          this.addLog({
+            type: "end_hit",
+            values: {
+              id: itm.id,
+            },
+          });
+          continue;
+        }
       }
 
       yield;
