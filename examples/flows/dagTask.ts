@@ -1,5 +1,6 @@
 import { DurableState, type StepIt } from "tiny-workflow-core/src";
 import { setTimeout } from "node:timers/promises";
+import assert from "node:assert";
 
 enum EStep {
   step_begin = "step_begin",
@@ -30,8 +31,8 @@ type TaskDagHandler = {
 class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
   constructor(private logicHandler: TaskDagHandler) {
     super(EStep.step_begin, {
-      withAuditLog: true,
-      debug: true,
+      withAuditLog: false,
+      debug: false,
     });
 
     // collect and resgister all step handler
@@ -40,8 +41,18 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
     );
   }
 
+  updateLogicHandler(logicHandler: TaskDagHandler) {
+    this.logicHandler = logicHandler;
+  }
+
   setState(state: TStateShape) {
     this.state = state;
+  }
+
+  override exec(runId?: string) {
+    if (!this.logicHandler) throw new Error("missing logicHandler");
+
+    return super.exec();
   }
 
   private async *step_begin(): StepIt<EStep, EStep.step_process> {
@@ -118,6 +129,15 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
 }
 
 async function main() {
+  /*
+    Simulate sequence task
+
+    t1_1 -> t1_2 -> t1_3
+    t2_1
+    t3_1 -> t3_2 -> t3_3
+
+    Should finish when all tasks done
+  */
   const taskState: TStateShape = {
     sequences: [
       // c1
@@ -151,28 +171,86 @@ async function main() {
           },
         },
       ],
+
+      // c3
+      [
+        {
+          id: "t3_1",
+          ctx: {
+            _doneAt: Date.now() + 1000,
+          },
+        },
+        {
+          id: "t3_2",
+          ctx: {
+            _doneAt: Date.now() + 5000,
+          },
+        },
+      ],
     ],
   };
 
+  // simulate pool workflow
   const handler: TaskDagHandler = {
     doStart: async (itm: TaskInfo) => {
       // do nothing
+      console.info("start task ", itm.id);
     },
     pollStatus: async (itm: TaskInfo) => {
       const _doneAt = itm.ctx?.["_doneAt"] ?? 0;
-      if (Date.now() > _doneAt) return "end";
-      return "processing";
+      let status: TaskInfo["status"] = "processing";
+      if (Date.now() > _doneAt) {
+        status = "end";
+      }
+
+      console.info("pool task ", itm.id, "->", status);
+      return status;
     },
   };
 
-  const ins = new DagTaskEngine(handler);
-  ins.setState(taskState);
+  async function _runMaxIter(ins: DagTaskEngine, maxIter: number) {
+    for await (const it of ins.exec()) {
+      maxIter--;
+      if (maxIter <= 0) return false;
 
-  for await (const it of ins.exec()) {
-    const breakTime = 500;
-    console.log(`\t take a break. poll again after ${breakTime} ms`);
-    console.dir(ins.currentState.sequences, { depth: 10 });
-    await setTimeout(breakTime);
+      const breakTime = 500;
+      console.log(`\t take a break. poll again after ${breakTime} ms`);
+      // console.dir(ins.currentState.sequences, { depth: 10 });
+      await setTimeout(breakTime);
+    }
+    return true;
+  }
+
+  let ins: DagTaskEngine;
+  let data;
+
+  // 1st run. only 2 iter
+  console.log("------------------------");
+  console.log("Run only 2 iter");
+  console.log("------------------------");
+
+  {
+    ins = new DagTaskEngine(handler);
+    ins.setState(taskState);
+    await _runMaxIter(ins, 2);
+    data = ins.toJSON();
+  }
+
+  console.log("------------------------");
+  console.log("SIMULATE SAVE / LOAD");
+  console.log("Resume after 5 sec");
+  console.log("------------------------");
+
+  await setTimeout(5000);
+
+  // load and resume
+  {
+    ins = DagTaskEngine.fromJSON(DagTaskEngine, data);
+    ins.updateLogicHandler(handler);
+
+    const res = await _runMaxIter(ins, 1000);
+
+    assert(res === true, "Something wrong");
   }
 
   console.log("allDone:", ins.allDone);
