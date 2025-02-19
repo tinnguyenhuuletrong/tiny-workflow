@@ -8,10 +8,10 @@ enum EStep {
   step_end = "step_end",
 }
 
-type TaskInfo = {
+type TaskInfo<T = Record<string, any>> = {
   id: string;
   status?: "waiting" | "processing" | "end";
-  ctx?: Record<string, any>;
+  ctx?: T;
 };
 
 type TaskSequence = TaskInfo[];
@@ -128,6 +128,20 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
   }
 }
 
+function buildSequence() {
+  const sequence: TaskSequence = [];
+  const ins = {
+    build() {
+      return sequence;
+    },
+    next(taskInfo: TaskInfo) {
+      sequence.push(taskInfo);
+      return ins;
+    },
+  };
+  return ins;
+}
+
 async function main() {
   /*
     Simulate sequence task
@@ -141,52 +155,51 @@ async function main() {
   const taskState: TStateShape = {
     sequences: [
       // c1
-      [
-        {
+      buildSequence()
+        .next({
           id: "t1_1",
           ctx: {
             _doneAt: Date.now() + 1000,
           },
-        },
-        {
+        })
+        .next({
           id: "t1_2",
           ctx: {
             _doneAt: Date.now() + 2000,
           },
-        },
-        {
+        })
+        .next({
           id: "t1_3",
           ctx: {
             _doneAt: Date.now() + 3000,
           },
-        },
-      ],
+        })
+        .build(),
 
       // c2
-      [
-        {
+      buildSequence()
+        .next({
           id: "t2_1",
           ctx: {
             _doneAt: Date.now() + 2000,
           },
-        },
-      ],
-
+        })
+        .build(),
       // c3
-      [
-        {
+      buildSequence()
+        .next({
           id: "t3_1",
           ctx: {
             _doneAt: Date.now() + 1000,
           },
-        },
-        {
+        })
+        .next({
           id: "t3_2",
           ctx: {
             _doneAt: Date.now() + 5000,
           },
-        },
-      ],
+        })
+        .build(),
     ],
   };
 
