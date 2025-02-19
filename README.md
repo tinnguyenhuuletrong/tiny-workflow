@@ -249,6 +249,47 @@ You need 5 rounds to guess the number 73. Congratulation!: []
  [ 🗝️ ] - r_1
 all done!
 ```
+- [DAG Task](examples/flows/dagTask.ts) - Simulate sequence tasks with dependencies.
+
+```mermaid
+graph TD
+  t1_1 --> t1_2 --> t1_3
+  t2_1
+  t3_1 --> t3_2 --> t3_3
+```
+
+```sh
+> bun run examples/flows/dagTask.ts
+
+------------------------
+Run only 2 iter
+------------------------
+start task  t1_1
+start task  t2_1
+start task  t3_1
+         take a break. poll again after 500 ms
+pool task  t1_1 -> processing
+pool task  t2_1 -> processing
+pool task  t3_1 -> processing
+------------------------
+SIMULATE SAVE / LOAD
+Resume after 5 sec
+------------------------
+pool task  t1_1 -> end
+pool task  t2_1 -> end
+pool task  t3_1 -> end
+start task  t1_2
+start task  t3_2
+         take a break. poll again after 500 ms
+pool task  t1_2 -> end
+pool task  t3_2 -> end
+start task  t1_3
+         take a break. poll again after 500 ms
+pool task  t1_3 -> end
+         take a break. poll again after 500 ms
+allDone: true
+```
+
 
 ## Development
 
