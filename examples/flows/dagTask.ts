@@ -1,8 +1,6 @@
 import { DurableState, type StepIt } from "tiny-workflow-core/src";
 import { setTimeout } from "node:timers/promises";
 import assert from "node:assert";
-import { createWriteStream } from "node:fs";
-import { join } from "node:path";
 
 enum EStep {
   step_begin = "step_begin",
