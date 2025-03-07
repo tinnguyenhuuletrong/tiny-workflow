@@ -8,24 +8,24 @@ enum EStep {
   step_end = "step_end",
 }
 
-type TaskInfo<T = Record<string, any>> = {
-  id: string;
+export type TaskInfo<T = Record<string, any>, IDType = string> = {
+  id: IDType;
   status?: "waiting" | "processing" | "end";
   ctx?: T;
 };
 
-type TaskSequence = TaskInfo[];
+export type TaskSequence<T = any, IDType = string> = TaskInfo<T, IDType>[];
 
-type TStateShape = Partial<{
+export type TStateShape = Partial<{
   sequences: TaskSequence[];
 }>;
 
 // additional audit log message
 type EAuditLog = "start_hit" | "end_hit";
 
-type TaskDagHandler = {
-  doStart: (itm: TaskInfo) => Promise<void>;
-  pollStatus: (itm: TaskInfo) => Promise<TaskInfo["status"]>;
+export type TaskDagHandler<D = any, K = string> = {
+  doStart: (itm: TaskInfo<D, K>) => Promise<void>;
+  pollStatus: (itm: TaskInfo<D, K>) => Promise<TaskInfo["status"]>;
 };
 
 class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
@@ -68,7 +68,20 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
     const tasks = sequences.map((chain) => this._processOneChain(chain));
 
     while (!this.allDone) {
-      await Promise.allSettled(tasks.map((itm) => itm.next()));
+      const res = await Promise.allSettled(tasks.map((itm) => itm.next()));
+      const errors = res.filter((itm) => itm.status === "rejected");
+      if (errors.length !== 0) {
+        throw new Error(
+          `Got errors: ${JSON.stringify(
+            errors.map((err) => {
+              return {
+                message: err?.reason?.message,
+                stackTrace: err?.reason?.stack,
+              };
+            })
+          )}`
+        );
+      }
 
       yield {
         canContinue: false,
@@ -100,8 +113,10 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
             id: itm.id,
           },
         });
-      } else {
-        // poll
+      }
+
+      // poll
+      if (itm.status === "processing") {
         const nextStatus = await this.logicHandler.pollStatus(itm);
         itm.status = nextStatus;
         if (nextStatus === "end") {
@@ -130,89 +145,96 @@ class DagTaskEngine extends DurableState<EStep, TStateShape, EAuditLog> {
   private isOneChainDone(chain: TaskInfo[]) {
     return chain.every((itm) => itm.status === "end");
   }
-
-  generateGraphviz() {
-    const sequences = this.state.sequences ?? [];
-    const logs = this.auditLogs;
-
-    let graph = 'digraph G {\n  rankdir="LR";\n';
-
-    sequences.forEach((sequence, index) => {
-      sequence.forEach((task, i) => {
-        if (i < sequence.length - 1) {
-          graph += `  "${task.id}" -> "${sequence[i + 1].id}";\n`;
-        }
-      });
-    });
-
-    logs.forEach((log) => {
-      const task = sequences.flat().find((t) => t.id === log.values.id);
-      const startTime = task?.ctx?.startTime
-        ? new Date(task.ctx.startTime).toISOString()
-        : "N/A";
-      const endTime = task?.ctx?.endTime
-        ? new Date(task.ctx.endTime).toISOString()
-        : "N/A";
-
-      if (log.type === "start_hit") {
-        graph += `  "${log.values.id}" [label="${log.values.id}", shape=box, style=filled, color=lightblue];\n`;
-      }
-    });
-
-    graph += "}\n";
-
-    console.log(graph);
-  }
-
-  generateTimelineLog() {
-    const logs = this.auditLogs;
-    let timelineLog = "Task Timeline:\n";
-
-    const groupedLogs = logs
-      .filter((itm) => ["start_hit", "end_hit"].includes(itm.type))
-      .sort((a, b) => Number(a._at) - Number(b._at))
-      .reduce((acc, log) => {
-        if (!acc[log.values.id]) {
-          acc[log.values.id] = {};
-        }
-        acc[log.values.id][log.type as EAuditLog] = log._at;
-        return acc;
-      }, {} as Record<string, { start_hit?: number; end_hit?: number }>);
-
-    Object.entries(groupedLogs).forEach(([id, times]) => {
-      const startTime = times.start_hit
-        ? new Date(times.start_hit).toISOString()
-        : "N/A";
-      const endTime = times.end_hit
-        ? new Date(times.end_hit).toISOString()
-        : "N/A";
-      const duration =
-        times.start_hit && times.end_hit
-          ? `${(times.end_hit - times.start_hit) / 1000} seconds`
-          : "N/A";
-
-      timelineLog += `Task ID: ${id}\n`;
-      timelineLog += `  Start Time: ${startTime}\n`;
-      timelineLog += `  End Time: ${endTime}\n`;
-      timelineLog += `  Duration: ${duration}\n`;
-    });
-
-    console.log(timelineLog);
-  }
 }
 
-function buildSequence() {
-  const sequence: TaskSequence = [];
+//------------------------------
+//  Helper
+//------------------------------
+
+function buildSequence<T = any, K = string>() {
+  const sequence: TaskSequence<T, K> = [];
   const ins = {
     build() {
       return sequence;
     },
-    next(taskInfo: TaskInfo) {
+    isEmpty() {
+      return sequence.length === 0;
+    },
+    next(taskInfo: TaskInfo<T, K>) {
       sequence.push(taskInfo);
       return ins;
     },
   };
   return ins;
+}
+
+function generateGraphviz(ins: DagTaskEngine) {
+  const sequences = ins.currentState.sequences ?? [];
+  const logs = ins.auditLogs;
+
+  let graph = 'digraph G {\n  rankdir="LR";\n';
+
+  sequences.forEach((sequence, index) => {
+    sequence.forEach((task, i) => {
+      if (i < sequence.length - 1) {
+        graph += `  "${task.id}" -> "${sequence[i + 1].id}";\n`;
+      }
+    });
+  });
+
+  logs.forEach((log) => {
+    const task = sequences.flat().find((t) => t.id === log.values.id);
+    const startTime = task?.ctx?.startTime
+      ? new Date(task.ctx.startTime).toISOString()
+      : "N/A";
+    const endTime = task?.ctx?.endTime
+      ? new Date(task.ctx.endTime).toISOString()
+      : "N/A";
+
+    if (log.type === "start_hit") {
+      graph += `  "${log.values.id}" [label="${log.values.id}", shape=box, style=filled, color=lightblue];\n`;
+    }
+  });
+
+  graph += "}\n";
+
+  console.log(graph);
+}
+
+function generateTimelineLog(ins: DagTaskEngine) {
+  const logs = ins.auditLogs;
+  let timelineLog = "Task Timeline:\n";
+
+  const groupedLogs = logs
+    .filter((itm) => ["start_hit", "end_hit"].includes(itm.type))
+    .sort((a, b) => Number(a._at) - Number(b._at))
+    .reduce((acc, log) => {
+      if (!acc[log.values.id]) {
+        acc[log.values.id] = {};
+      }
+      acc[log.values.id][log.type as EAuditLog] = log._at;
+      return acc;
+    }, {} as Record<string, { start_hit?: number; end_hit?: number }>);
+
+  Object.entries(groupedLogs).forEach(([id, times]) => {
+    const startTime = times.start_hit
+      ? new Date(times.start_hit).toISOString()
+      : "N/A";
+    const endTime = times.end_hit
+      ? new Date(times.end_hit).toISOString()
+      : "N/A";
+    const duration =
+      times.start_hit && times.end_hit
+        ? `${(times.end_hit - times.start_hit) / 1000} seconds`
+        : "N/A";
+
+    timelineLog += `Task ID: ${id}\n`;
+    timelineLog += `  Start Time: ${startTime}\n`;
+    timelineLog += `  End Time: ${endTime}\n`;
+    timelineLog += `  Duration: ${duration}\n`;
+  });
+
+  console.log(timelineLog);
 }
 
 async function main() {
@@ -343,8 +365,8 @@ async function main() {
   console.dir(ins.toJSON(), { depth: 10 });
 
   console.log("Generating Graphviz digraph...");
-  ins.generateGraphviz();
-  ins.generateTimelineLog();
+  generateGraphviz(ins);
+  generateTimelineLog(ins);
 }
 
 main();
