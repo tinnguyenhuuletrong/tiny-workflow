@@ -1,0 +1,10 @@
+your task is analyze @packages/, @examples/, @README.md , @doc/ To understand the repo, motivation, examples, best
+  practice. Then generate /doc/tiny-flow-llms-full.txt 
+  - document targeting for AI agent coder. Know how to use the package, make a flow from end-developer perspective 
+  - document should contain code sample for use cases ( infer from Example -> feel free to generate a new valid usecase if
+  need from there ) 
+
+
+  Reference the good example from 
+  - Pixijs @doc/_ref/pixi-js-llms-full.txt 
+  - Bunjs @doc/_ref/bun-llms-full.txt

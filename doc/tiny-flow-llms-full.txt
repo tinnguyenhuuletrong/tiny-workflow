@@ -1,0 +1,473 @@
+# tiny-workflow Documentation for LLMs
+
+> tiny-workflow is a lightweight, portable workflow engine inspired by Temporal.io. It allows you to write long-running, persistent, and pausable business logic as a single piece of TypeScript code.
+
+This document provides a comprehensive guide for an AI agent coder to understand and use the `tiny-workflow` package.
+
+---
+
+## Overview
+
+**tiny-workflow** is designed to be a simpler, more portable alternative to powerful workflow engines like Temporal. It requires only basic components to run and is built entirely in TypeScript. The core runtime is available via the NPM package `@tiny-json-workflow/runtime-durable-state`.
+
+### Core Principles
+
+- **Code-Driven**: Workflows are defined as TypeScript classes that control the sequence of operations.
+- **Separation of Concerns**: The workflow's *control flow* (the sequence and conditions for steps) is separated from the *business logic* (the tasks that perform the work).
+- **Serializable & Portable**: The entire state of a workflow can be serialized to a single JSON object. This allows you to store the workflow state in any database and resume it later, even on a different machine.
+- **Resilient**: Actions within a step are cached using `withAction` to prevent re-execution on resume.
+
+---
+
+## Core Concepts
+
+The entire workflow is built around the `DurableState` class, imported from `@tiny-json-workflow/runtime-durable-state`.
+
+### The `DurableState` Class
+
+This is the foundation of any workflow. You create your own workflow class by extending `DurableState`.
+
+It has three important generic type arguments:
+
+1. `EStep`: A string enum that defines all possible steps in your workflow.
+2. `TStateShape`: A TypeScript type that defines the shape of your persistent state (`this.state`).
+3. `EAuditLog`: A string union type for custom log messages you want to record.
+
+```typescript
+import { DurableState, type StepIt } from "@tiny-json-workflow/runtime-durable-state";
+
+export class YourWorkflow extends DurableState<EStep, TStateShape, any> {
+  // ... implementation
+}
+```
+
+### Steps
+
+Steps are the building blocks of your workflow's logic. Each step is an `async` generator method within your workflow class. The name of the method must correspond to a member of your `EStep` enum. The workflow engine executes these steps in sequence.
+
+A step function's signature looks like this:
+`private async *my_step_name(): StepIt<EStep, EStep.next_step_name>`
+
+You return `{ nextStep: EStep.next_step_name }` to transition, or `{ nextStep: null }` to end the workflow.
+
+### State (`this.state`)
+
+The `state` property holds all the data for your workflow that needs to persist across pauses and resumptions. It is a simple JavaScript object that must conform to the `TStateShape` you defined.
+
+### Persistence (Save/Load)
+
+Workflows are designed to be saved and loaded easily.
+
+- `instance.toJSON()`: Serializes the entire workflow instance into a JSON object.
+- `YourWorkflowClass.fromJSON(YourWorkflowClass, data)`: A static method to restore a workflow instance from its serialized JSON data.
+
+---
+
+## Authoring Workflows: The Generated Code Pattern
+
+The recommended way to create a workflow is by using a code generator that scaffolds a workflow file for you. This file separates the workflow's control flow from its implementation.
+
+The generated file has two parts:
+
+1. **GENERATED**: This section contains the `DurableState` class that defines the workflow's structure, steps, and transitions. **You should not edit this part manually.**
+2. **IMPLEMENTATION**: This section contains stub functions for the actual business logic (Tasks). **This is where you write your code.**
+
+### The Generated Workflow File Structure
+
+Based on the reference template, a generated workflow file looks like this:
+
+```typescript
+// doc/_ref/.generated-workflow.ts
+
+// -----------------
+// --- GENERATED ---
+// -----------------
+import { DurableState, type StepIt } from "@tiny-json-workflow/runtime-durable-state";
+
+// 1. Enums and Types for Steps and State
+export enum EStep {
+  StartFlow = 'StartFlow',
+  SendWelcome = 'SendWelcome',
+  CheckProfile = 'CheckProfile',
+  SendReminder = 'SendReminder',
+  EndFlow = 'EndFlow'
+}
+
+export type TStateShape = {
+  userId: string;
+  profileIsComplete?: boolean;
+};
+
+// 2. A 'Tasks' type defining the business logic functions
+export type Tasks = {
+  SendWelcome: (context: TStateShape, params: any) => Promise<TStateShape>;
+  SendReminder: (context: TStateShape) => Promise<TStateShape>;
+}
+
+// 3. The DurableState class defining the control flow
+export class UserOnboardingFlow extends DurableState<EStep, TStateShape, any> {
+  constructor(private tasks: Tasks) {
+    super(EStep.StartFlow);
+    // ... boilerplate setup ...
+  }
+
+  // 4. Step methods that call tasks via withAction
+  private async *SendWelcome(): StepIt<EStep, EStep.CheckProfile> {
+    const res = await this.withAction<TStateShape>("SendWelcome", async () => { 
+      // Delegates to the injected task implementation
+      return this.tasks.SendWelcome(this.state, undefined); 
+    }); 
+
+    if (res.it) yield res.it;
+    if (res.value) this.state = res.value; // Update state with the task's result
+    return { nextStep: EStep.CheckProfile };
+  }
+
+  private async *CheckProfile(): StepIt<EStep, any> {
+    if (this.state.profileIsComplete == true) {
+      return { nextStep: EStep.EndFlow };
+    }
+    if (this.state.profileIsComplete == false) {
+      return { nextStep: EStep.SendReminder };
+    }
+    return { nextStep: null }; // Default fall-through
+  }
+  
+  // ... other steps ...
+}
+
+// --- IMPLEMENTATION ---
+
+// 5. Your part: Implement the task functions
+async function SendWelcome(context: TStateShape, params: any): Promise<TStateShape> {
+  console.log(`Sending welcome email to user ${context.userId}...`);
+  // TODO: Implement task 'Send Welcome Email'
+  return context; // Return the new state
+}
+
+async function SendReminder(context: TStateShape): Promise<TStateShape> {
+  console.log(`Sending profile reminder to user ${context.userId}...`);
+  // TODO: Implement task 'Send Profile Reminder'
+  return context;
+}
+
+// 6. A factory to wire it all together
+export function createWorkflow() {
+  return new UserOnboardingFlow({
+    SendWelcome,
+    SendReminder
+  });
+}
+```
+
+### The Task-Oriented Pattern
+
+This pattern separates the *what* from the *how*.
+
+- The **`UserOnboardingFlow` class** defines *what* steps exist and in *what order* they run. It handles the workflow's persistence and resilience.
+- The **`SendWelcome` and `SendReminder` functions** define *how* a specific piece of business logic is executed (e.g., calling an API, sending an email).
+
+Your main job as a developer is to fill in the `// TODO:` sections within the implementation functions.
+
+The step methods in the generated class use `withAction` to call your task implementations. This is crucial because it ensures that even if the workflow is paused and resumed, your business logic (like sending an email) is **executed only once**.
+
+---
+
+## Key API Methods
+
+(These methods are used inside the `DurableState` class and are typically part of the generated code.)
+
+### `withAction<T>(key, action)`
+
+Executes and caches a function. In the generated pattern, this is used to call your task implementations. The `action`'s return value should be the new state object, which then updates `this.state`.
+
+```typescript
+// Inside a generated step method:
+const res = await this.withAction<TStateShape>("SendWelcome", async () => { 
+  return this.tasks.SendWelcome(this.state, undefined); 
+}); 
+
+if (res.it) yield res.it;
+if (res.value) this.state = res.value; // Update the workflow's state
+```
+
+### `waitForMs(key, duration)`
+
+Pauses the workflow for a specified duration. Useful for scheduled reminders or delays.
+
+```typescript
+// Inside a step method:
+const wait = this.waitForMs("wait_a_day", 24 * 60 * 60 * 1000);
+if (wait.it) yield wait.it;
+// This code runs after the delay
+```
+
+### `waitForEvent<T>(key, requestPayload)`
+
+Pauses the workflow to wait for external data, such as user input.
+
+```typescript
+// Inside a step method for an interactive workflow:
+const { it, value } = this.waitForEvent<number>("get_user_guess", {
+  question: "Guess a number between 1 and 100",
+});
+if (it) yield it;
+
+const userGuess = value(); // The value provided by resolveResume()
+```
+
+---
+
+## Advanced Topics
+
+The following concepts from the original library structure are still relevant for managing and running the generated workflows.
+
+### Managing Multiple Workflows
+
+For real-world applications, you'll need to manage many workflow instances concurrently. The `WorkflowRuntime` and a `Context` object are used for this. These would be imported from `@tiny-json-workflow/runtime-durable-state`.
+
+- **`WorkflowRuntime`**: A helper class that orchestrates running, pausing, and resuming workflows.
+- **`SimpleContext`**: A basic in-memory context for storing workflow state and managing locks. You would extend this to connect to a real database.
+
+### Example Runtime Usage
+
+```typescript
+// This code would consume the generated 'createWorkflow' factory
+import { SimpleContext, WorkflowRuntime } from "@tiny-json-workflow/runtime-durable-state";
+import { createWorkflow, UserOnboardingFlow } from "./.generated-workflow"; // Your generated file
+
+async function main() {
+  const ctx = new SimpleContext();
+  const runtime = new WorkflowRuntime({
+    ctx,
+    genRunId: async () => `user-onboarding-${Date.now()}`,
+    InstanceClass: UserOnboardingFlow, // Pass the class constructor
+  });
+
+  const onboardingFlow = createWorkflow();
+  // Set initial state if needed
+  onboardingFlow.setState({ userId: "user-123", profileIsComplete: false });
+
+  // Run the workflow
+  let result = await runtime.run(onboardingFlow);
+
+  switch (result.status) {
+    case "need_resume":
+      {
+        // check more info in result.resumeEntry. Which contain the type and resume token
+        // If the workflow is waiting for a timer, the context can schedule it
+        if (result.resumeEntry.type == "timer")
+          await ctx.scheduleNextRun(result.runId, result);
+      }
+      break;
+    case "error":
+      // TODO: Throw of report error in result.error
+      break;
+    case "finished":
+      // Workflow done
+      break;
+  }
+
+  // ... wait for all workflows to finish
+  await ctx.runner.idle();
+
+  // Bonus: Get data by RunId
+  const runData = await ctx.load(result.runId);
+}
+```
+
+## Typedef for package @tiny-json-workflow/runtime-durable-state
+
+> Copy from npmPackage [https://www.npmjs.com/package/@tiny-json-workflow/runtime-durable-state?activeTab=code]
+
+``` typescript
+
+export type ContinueTrigger = {
+ type: "time";
+ resumeId: string;
+ resumeAt: number;
+} | {
+ type: "event";
+ resumeId: string;
+};
+export type DurableStateIterator<T> = {
+ canContinue: boolean;
+ activeStep: T;
+ resumeTrigger?: ContinueTrigger;
+};
+export type DurableStateReturn<StateShape> = {
+ isEnd: boolean;
+ finalState: StateShape;
+};
+export type ExeOpt = {
+ ignoreCache?: boolean;
+ maxRetry?: number;
+};
+export type TimerSystemEntry = {
+ type: "timer";
+ resumeId: string;
+ isDone: boolean;
+ resumeAfter: number;
+ responsePayload?: any;
+};
+export type EventSystemEntry = {
+ type: "event";
+ resumeId: string;
+ isDone: boolean;
+ requestPayload?: any;
+ responsePayload?: any;
+};
+export type DurableStateSystemEntry = TimerSystemEntry | EventSystemEntry;
+export type StepIt<EStep, MoveToStep> = AsyncIterator<DurableStateIterator<EStep>, {
+ nextStep: MoveToStep | null;
+}>;
+export type StepHandler<EStep> = () => StepIt<EStep, EStep>;
+export type AuditLogEntry<S, EStep> = {
+ type: "init" | "cache" | "transition" | "interrupt_begin" | "interrupt_end" | "action_error" | S;
+ values: Record<string, any>;
+ _at?: number;
+ _step?: EStep;
+};
+export declare const SystemAuditLogType: string[];
+export type DurableStateOpt = {
+ withAuditLog: boolean;
+ debug?: boolean;
+};
+export type Constructor<T> = new (...args: any[]) => T;
+export type SnapshotType<T extends DurableState> = ReturnType<T["toJSON"]>;
+export declare class DurableState<EStep = any, StateShape = Record<string, any>, ExtAuditLogType = any> {
+ private opt?;
+ private step;
+ private cache;
+ private system;
+ private logs;
+ protected state: StateShape;
+ protected stepHandler: Map<EStep, StepHandler<EStep>>;
+ protected runId?: string;
+ constructor(defaultStep?: EStep, opt?: DurableStateOpt | undefined);
+ setState(state: StateShape): void;
+ /** Current step */
+ get currentStep(): EStep;
+ /** Clone of audit logs */
+ get auditLogs(): AuditLogEntry<ExtAuditLogType, EStep>[];
+ /** Clone of current state */
+ get currentState(): StateShape;
+ /** Sequence number. It increa everytime state change */
+ get stepSeq(): any;
+ /** Prefix for system and cache key - prevent conflict in case a step visit multiple times */
+ protected get stepKeyPrefix(): string;
+ /** Find resumeEntry by Id - return a cloned */
+ getResume(resumeId: string): DurableStateSystemEntry | null;
+ /** list all pending resumeEntries - return a cloned list */
+ listPendingResume(): DurableStateSystemEntry[];
+ /** resole a resume entry */
+ resolveResume(resumeId: string, payload?: any): void;
+ exec(runId?: string): AsyncGenerator<DurableStateIterator<EStep>, DurableStateReturn<StateShape> | null>;
+ private _moveToStep;
+ protected withAction<TRes = any>(key: string, action: () => Promise<any>, opt?: ExeOpt): Promise<{
+  it?: DurableStateIterator<EStep>;
+  value: TRes | undefined;
+ }>;
+ protected waitForMs(key: string, timeoutMs: number): {
+  it?: DurableStateIterator<EStep>;
+  value: () => number | undefined;
+ };
+ protected waitForEvent<TRes = any>(key: string, requestPayload: any): {
+  it?: DurableStateIterator<EStep>;
+  value: () => TRes | undefined;
+ };
+ protected genResumeId(key: string): string;
+ protected nowMs(): number;
+ protected addLog(itm: AuditLogEntry<ExtAuditLogType, EStep>): void;
+ protected _debug(...args: any[]): void;
+ private canRetry;
+ toJSON(): {
+  step: EStep;
+  state: StateShape;
+  cache: Record<string, any>;
+  system: Record<string, DurableStateSystemEntry>;
+  logs: AuditLogEntry<ExtAuditLogType, EStep>[];
+ };
+ static fromJSON<EStep, ShapeState, ExtAuditLogType, T extends DurableState<EStep, ShapeState, ExtAuditLogType>>(type: Constructor<T>, data: {
+  step: EStep;
+  state: ShapeState;
+  cache?: Record<string, any>;
+  system?: Record<string, DurableStateSystemEntry>;
+  logs?: AuditLogEntry<ExtAuditLogType, EStep>[];
+ }, opt?: DurableStateOpt): T;
+}
+export declare class MicroTaskRunner {
+ private pendingTasks;
+ private resolved;
+ addTask(task: Promise<any>, opts?: {
+  runId: string;
+ }): Promise<any>;
+ reset(): void;
+ stats(): {
+  total: number;
+  done: number;
+ };
+ /** waiting for all pending tasks settled */
+ idle(): Promise<void>;
+}
+export type WorkflowRuntimeOpt<T extends DurableState> = {
+ ctx: IRuntimeContext<T>;
+ genRunId: () => Promise<string>;
+ InstanceClass: Constructor<T>;
+};
+export interface IRuntimeContext<T extends DurableState> {
+ attachRuntime(runtime: WorkflowRuntime<T>): void;
+ save(runId: string, snapshotData: SnapshotType<T>): Promise<void>;
+ load(runId: string): Promise<SnapshotType<T> | null>;
+ lock(runId: string): Promise<void>;
+ unlock(runId: string): Promise<void>;
+}
+export type WorkflowRunResult = {
+ runId: string;
+ status: "need_resume";
+ resumeEntry: DurableStateSystemEntry;
+} | {
+ runId: string;
+ status: "finished";
+} | {
+ runId: string;
+ status: "error";
+ error?: any;
+};
+export declare class WorkflowRuntime<T extends DurableState> {
+ private opts;
+ constructor(opts: WorkflowRuntimeOpt<T>);
+ get ctx(): IRuntimeContext<T>;
+ run(ins: T, runId?: string): Promise<WorkflowRunResult>;
+ resume(runId: string, { resumeId, resumePayload, }: {
+  resumeId: string;
+  resumePayload?: any;
+ }): Promise<WorkflowRunResult>;
+ createInstanceByRunId(runId: string, Cons: Constructor<T>): Promise<T>;
+}
+export declare class MemoryLock {
+ readonly promise: Promise<void>;
+ private resolve;
+ constructor();
+ unlock(): void;
+ wait(): Promise<void>;
+}
+export declare class SimpleContext<T extends DurableState> implements IRuntimeContext<T> {
+ readonly runner: MicroTaskRunner;
+ runtime: WorkflowRuntime<T>;
+ db: Map<string, SnapshotType<T>>;
+ dbLock: Map<string, MemoryLock>;
+ attachRuntime(runtime: WorkflowRuntime<T>): void;
+ lock(runId: string): Promise<void>;
+ unlock(runId: string): Promise<void>;
+ save(runId: string, snapshotData: SnapshotType<T>): Promise<void>;
+ load(runId: string): Promise<SnapshotType<T> | null>;
+ start(): Promise<void>;
+ shutdown(): Promise<void>;
+ withTransaction(runId: string, action: () => Promise<void>): Promise<void>;
+ scheduleNextRun(runId: string, result: WorkflowRunResult): Promise<void>;
+}
+
+export {};
+
+```

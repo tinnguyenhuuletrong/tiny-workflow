@@ -1,0 +1,13 @@
+{
+  "name": "template",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@tiny-json-workflow/runtime-durable-state": "^0.1.0"
+  }
+}
