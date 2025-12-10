@@ -5,7 +5,7 @@
     "": {
       "name": "template",
       "dependencies": {
-        "@tiny-json-workflow/runtime-durable-state": "^0.1.0",
+        "@tiny-json-workflow/runtime-durable-state": "^0.1.1",
       },
       "devDependencies": {
         "@types/bun": "latest",
@@ -16,7 +16,7 @@
     },
   },
   "packages": {
-    "@tiny-json-workflow/runtime-durable-state": ["@tiny-json-workflow/runtime-durable-state@0.1.0", "", {}, "sha512-EQDR5jIJE9/GX9+ncR2GNj4SqZaOIyWyw1FoirtHHFikS5Og0oojJs+82djRlrPsd+M3lmwsKB9Rp4fRJt5Rtg=="],
+    "@tiny-json-workflow/runtime-durable-state": ["@tiny-json-workflow/runtime-durable-state@0.1.1", "", {}, "sha512-T8VCPI47l6UaSrbwRO3TUL6rVPZjmDKDKzwptBOoyt9Tvh/s7ICFVR1OgTCSltO8yacEEayiVl0IRgoOfn6sxQ=="],
 
     "@types/bun": ["@types/bun@1.3.4", "", { "dependencies": { "bun-types": "1.3.4" } }, "sha512-EEPTKXHP+zKGPkhRLv+HI0UEX8/o+65hqARxLy8Ov5rIxMBPNTjeZww00CIihrIQGEQBYg+0roO5qOnS/7boGA=="],
 
