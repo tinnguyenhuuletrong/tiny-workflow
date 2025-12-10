@@ -108,7 +108,11 @@ export type Tasks = {
 export class UserOnboardingFlow extends DurableState<EStep, TStateShape, any> {
   constructor(private tasks: Tasks) {
     super(EStep.StartFlow);
-    // ... boilerplate setup ...
+
+    // collect and resgister all step handler
+    Object.values(EStep).map((step) =>
+      this.stepHandler.set(step, this[step].bind(this))
+    );
   }
 
   // 4. Step methods that call tasks via withAction
